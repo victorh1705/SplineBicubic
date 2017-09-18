@@ -6,11 +6,7 @@
 package com.mycompany.splinecubic;
 
 import FileManager.FileManager;
-import Estruturas.CriaVetor;
 import Estruturas.MatrizInArray;
-import org.la4j.Matrix;
-import org.la4j.matrix.dense.Basic2DMatrix;
-import org.la4j.matrix.sparse.CRSMatrix;
 
 /**
  *

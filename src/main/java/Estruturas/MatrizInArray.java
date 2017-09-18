@@ -8,6 +8,7 @@ package Estruturas;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import static java.lang.Math.pow;
+import org.la4j.matrix.sparse.CRSMatrix;
 
 /**
  *
@@ -16,13 +17,32 @@ import static java.lang.Math.pow;
 public class MatrizInArray {
 
     private double[] array;
-    private int linha;
-    private int coluna;
+    private CRSMatrix matrix_esparca;
+    private int linha,
+            coluna,
+            linha_aux,
+            coluna_aux,
+            num_equacao,
+            indice_linha,
+            indice_coluna,
+            regiao_linha,
+            regiao_coluna;
+
+    private enum equation {
+        function,
+        function_x,
+        function_y,
+        function_xy,
+        function_xx,
+        function_yy;
+    }
 
     public MatrizInArray(int linha, int coluna) {
         this.linha = linha;
         this.coluna = coluna;
+        this.num_equacao = 16 * linha * coluna;
         this.array = new double[coluna * linha];
+        this.indice_linha = 0;
     }
 
     public void add(int indice_linha, int indice_coluna, double valor) {
@@ -40,18 +60,15 @@ public class MatrizInArray {
     }
 
     private boolean isAresta(int indice_linha, int indice_coluna) {
-        if (indice_linha > 0 && indice_linha < linha - 1) {
+        if (indice_linha == 0 || indice_linha == linha - 1) {
             return true;
         }
-        if (indice_coluna > 0 && indice_coluna < coluna - 1) {
-            return true;
-        }
-        return false;
+        return indice_coluna == 0 || indice_coluna == coluna - 1;
     }
 
     private boolean isVertice(int indice_linha, int indice_coluna) {
-        if (indice_linha > 0 && indice_linha < linha - 1) {
-            if (indice_coluna > 0 && indice_coluna < coluna - 1) {
+        if (indice_linha == 0 || indice_linha == linha - 1) {
+            if (indice_coluna == 0 || indice_coluna == coluna - 1) {
                 return true;
             }
         }
@@ -60,31 +77,56 @@ public class MatrizInArray {
 
     public MatrizInArray criaMatrizInterpolacao(MatrizInArray dados) {
 
-        int indices = linha * coluna;
+        System.out.println("Indices: " + num_equacao);
 
-        MatrizInArray matriz_interpolacao = new MatrizInArray(indices, 16);
+        MatrizInArray matriz_interpolacao = new MatrizInArray(num_equacao, 16);
+        matrix_esparca = new CRSMatrix(num_equacao, num_equacao);
 
-        for (int i = 0; i < linha; i++) {
-            for (int j = 0; j < coluna; j++) {
-
-                for (int k = 0; k < 4; k++) {
-                    for (int l = 0; l < 4; l++) {
-                        int indice = 16 * i * coluna + 16 * j + 4 * k + l;
-                        int indice_linha = indice / 16;
-                        int indice_coluna = indice % 16;
-
-                        double valor = (double) ((double) pow(i+1, k) * pow(j+1, l));
-
-                        matriz_interpolacao.add(indice_linha, indice_coluna, valor);
-                    }
-
-                }
-
+//        for (regiao_linha = 0; regiao_linha <= linha; regiao_linha++) {
+//            for (regiao_coluna = 0; regiao_coluna <= coluna; regiao_coluna++) {
+//
+////                for (int i = 0; i <= 1; i++) {
+////                    for (int j = 0; j <= 1; j++) {
+////                        intervalo(matriz_interpolacao, i, j);
+//                        intervalo(matriz_interpolacao, 0, 0);
+////                    }
+////                }
+//            }
+//        }
+        for (linha_aux = 0; indice_linha <= linha; indice_linha++) {
+            for (coluna_aux = 0; coluna_aux <= coluna; coluna_aux++) {
+                intervalo(matriz_interpolacao, linha, coluna);
             }
-
         }
 
+        System.out.print("\nNum_equacao: " + num_equacao);
+        System.out.print("\nIndices_linha: " + indice_linha);
+
+//        System.out.print(matrix_esparca.toCSV());
         return matriz_interpolacao;
+    }
+
+    /**
+     * Trata os pontos da Regiao (regiao_linha, regiao_coluna) onde i
+     * = regiao_linha e j = regiao_coluna
+     *
+     * (i,j), (i+1,j), (i,j+1), (i+1,j+1)
+     *
+     * @param matriz_interpolacao
+     * @param ponto_x
+     * @param ponto_y
+     */
+    private void intervalo(MatrizInArray matriz_interpolacao, int ponto_x, int ponto_y) {
+
+        if (isVertice(ponto_x, ponto_y)) {
+            indice_linha += 4;
+            vertice(matriz_interpolacao, ponto_x, ponto_y);
+        } else if (isAresta(ponto_x, ponto_y)) {
+            indice_linha += 8;
+        } else {
+            indice_linha += 16;
+        }
+        
     }
 
     public void createFile() {
@@ -98,6 +140,57 @@ public class MatrizInArray {
             }
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    /**
+     * Insere todas as condições do vertice
+     *
+     * @param matriz_interpolacao
+     * @param i
+     * @param j
+     */
+    private void vertice(MatrizInArray matriz_interpolacao, int i, int j) {
+        function(matriz_interpolacao, i, j, equation.function);
+        function(matriz_interpolacao, i, j, equation.function_x);
+        function(matriz_interpolacao, i, j, equation.function_y);
+
+        System.out.printf("\nEq.: (x,y)=(%d,%d)", i, j);
+    }
+
+    /**
+     * Insere os valores de A*x*y na matriz
+     *
+     * @param matriz_interpolacao
+     * @param intervalo_x
+     * @param intervalo_y
+     * @param tipo
+     */
+    private void function(MatrizInArray matriz_interpolacao, int intervalo_x, int intervalo_y, equation tipo) {
+        double valor = 0;
+
+        for (int i = 0; i <= 3; i++) {
+            for (int j = 0; j <= 3; j++) {
+                int indice_coluna = 16 * intervalo_y + 4 * j + i;
+
+                switch (tipo) {
+                    case function:
+                        valor = pow(intervalo_x, i) * pow(intervalo_y, j);
+                    case function_x:
+                        valor = intervalo_x * pow(intervalo_x - 1, i) * pow(intervalo_y, j);
+                    case function_y:
+                        valor = intervalo_y * pow(intervalo_x, i) * pow(intervalo_y - 1, j);
+                    case function_xy:
+                        valor = intervalo_x * intervalo_y * pow(intervalo_x - 1, i) * pow(intervalo_y - 1, j);
+                    case function_xx:
+                        valor = intervalo_x * (intervalo_x - 1) * pow(intervalo_x - 2, i) * pow(intervalo_y, j);
+                    case function_yy:
+                        valor = intervalo_y * (intervalo_y - 1) * pow(intervalo_x, i) * pow(intervalo_y - 2, j);
+
+                }
+
+//                matrix_esparca.set(indice_linha, indice_coluna, valor);
+            }
         }
     }
 
