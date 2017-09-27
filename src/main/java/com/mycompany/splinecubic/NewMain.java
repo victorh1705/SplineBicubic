@@ -26,7 +26,7 @@ public class NewMain {
         
         MatrizInArray ma = matriz_dados.criaMatrizInterpolacao(matriz_dados);
 
-        ma.createFile();
+//        ma.createFile();
 //        CriaVetor cv = new CriaVetor();
     }
 }

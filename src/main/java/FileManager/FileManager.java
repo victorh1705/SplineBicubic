@@ -90,10 +90,11 @@ public class FileManager {
                     for (String col : coluna) {
                         int indice = numColuna * indiceLinha + indiceColuna;
 
+                        System.out.printf("\nIndice coluna: %d", indice);
+                        
                         matriz.add(indiceLinha, indiceColuna, Double.valueOf(col));
                         indiceColuna++;
                     }
-                    System.out.println("");
 
                     indiceLinha++;
                 }
