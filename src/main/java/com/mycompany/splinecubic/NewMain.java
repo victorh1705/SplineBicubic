@@ -24,7 +24,7 @@ public class NewMain {
 
         int indices = matriz_dados.getColuna() * matriz_dados.getLinha();
         
-        MatrizInArray ma = matriz_dados.criaMatrizInterpolacao(matriz_dados);
+        MatrizInArray ma = matriz_dados.criaMatrizInterpolacao();
 
 //        ma.createFile();
 //        CriaVetor cv = new CriaVetor();
