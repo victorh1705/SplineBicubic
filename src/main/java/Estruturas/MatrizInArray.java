@@ -239,19 +239,29 @@ public class MatrizInArray {
                         valor_matriz = pow(intervalo_x, i) * pow(intervalo_y, j);
                         break;
                     case function_x:
-                        valor_matriz = intervalo_x * pow(intervalo_x - 1, i) * pow(intervalo_y, j);
+                        if (i > 0) {
+                            valor_matriz = i * pow(intervalo_x, i - 1) * pow(intervalo_y, j);
+                        }
                         break;
                     case function_y:
-                        valor_matriz = intervalo_y * pow(intervalo_x, i) * pow(intervalo_y - 1, j);
+                        if (j > 0) {
+                            valor_matriz = j * pow(intervalo_x, i) * pow(intervalo_y, j - 1);
+                        }
                         break;
                     case function_xy:
-                        valor_matriz = intervalo_x * intervalo_y * pow(intervalo_x - 1, i) * pow(intervalo_y - 1, j);
+                        if (i > 0 && j > 0) {
+                            valor_matriz = i * j * pow(intervalo_x, i - 1) * pow(intervalo_y, j - 1);
+                        }
                         break;
                     case function_xx:
-                        valor_matriz = intervalo_x * (intervalo_x - 1) * pow(intervalo_x - 2, i) * pow(intervalo_y, j);
+                        if (i > 1) {
+                            valor_matriz = i * (i - 1) * pow(intervalo_x, i - 2) * pow(intervalo_y, j);
+                        }
                         break;
                     case function_yy:
-                        valor_matriz = intervalo_y * (intervalo_y - 1) * pow(intervalo_x, i) * pow(intervalo_y - 2, j);
+                        if (j > 2) {
+                            valor_matriz = j * (j - 1) * pow(intervalo_x, i) * pow(intervalo_y, j - 2);
+                        }
                         break;
 
                 }
