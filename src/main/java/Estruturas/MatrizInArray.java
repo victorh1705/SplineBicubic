@@ -129,11 +129,13 @@ public class MatrizInArray {
 //        resultados.set(indice_linha, );
         if (isVertice(ponto_x, ponto_y)) {
             vertice(ponto_x, ponto_y);
+//            indice_linha += 4;
         } else if (isAresta(ponto_x, ponto_y)) {
-//            aresta(ponto_x, ponto_y);
-            indice_linha += 8;
+            aresta(ponto_x, ponto_y);
+//            indice_linha += 8;
         } else {
-            indice_linha += 16;
+            interno(ponto_x, ponto_y);
+//            indice_linha += 16;
         }
 
         System.out.printf("\nEq.: (x,y)=(%d,%d)", ponto_x, ponto_y);
@@ -151,6 +153,15 @@ public class MatrizInArray {
         try (PrintStream out = new PrintStream("vetor.csv")) {
             NumberFormat nf = NumberFormat.getInstance();
             out.print(resultados.toCSV(nf));
+
+            int cont_zeros = 0;
+            for (int i = 0; i < resultados.length(); i++) {
+                if (resultados.get(i) == 0) {
+                    cont_zeros++;
+                }
+            }
+            out.printf("\n quantidade de Zeros : %d \n", cont_zeros);
+
             System.out.print("\nResultado: vetor.txt");
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
@@ -206,11 +217,32 @@ public class MatrizInArray {
 
     private void interno(int ponto_x, int ponto_y) {
         function(ponto_x, ponto_y, equation.function);
+        indice_linha++;
+        for (int i = 0; i <= 1; i++) {
+            for (int j = 0; j <= 1; j++) {
+                if (i != 0 || j != 0) {
+                    function(ponto_x, ponto_y, equation.function);
+                    function(ponto_x, ponto_y, equation.function, regiao_linha + i, regiao_coluna + j, true);
+                    indice_linha++;
 
-        function(ponto_x, ponto_y, equation.function_x);
-        function(ponto_x, ponto_y, equation.function_y);
-        function(ponto_x, ponto_y, equation.function_xx);
-        function(ponto_x, ponto_y, equation.function_yy);
+                    function(ponto_x, ponto_y, equation.function_x);
+                    function(ponto_x, ponto_y, equation.function_x, regiao_linha + i, regiao_coluna + j, true);
+                    indice_linha++;
+
+                    function(ponto_x, ponto_y, equation.function_y);
+                    function(ponto_x, ponto_y, equation.function_y, regiao_linha + i, regiao_coluna + j, true);
+                    indice_linha++;
+
+                    function(ponto_x, ponto_y, equation.function_xx);
+                    function(ponto_x, ponto_y, equation.function_xx, regiao_linha + i, regiao_coluna + j, true);
+                    indice_linha++;
+
+                    function(ponto_x, ponto_y, equation.function_yy);
+                    function(ponto_x, ponto_y, equation.function_yy, regiao_linha + i, regiao_coluna + j, true);
+                    indice_linha++;
+                }
+            }
+        }
     }
 
     /**
@@ -226,12 +258,13 @@ public class MatrizInArray {
     }
 
     private void function(int intervalo_x, int intervalo_y, equation tipo, int regiao_x, int regiao_y, boolean negativo) {
-        double valor_matriz = 0,
-                valor_vetor = get(intervalo_x, intervalo_y);
+        double valor_matriz,
+                valor_vetor = (tipo == equation.function)? get(intervalo_x, intervalo_y) : 0;
         int num_regioes_coluna = coluna - 1;
 
         for (int i = 0; i <= 3; i++) {
             for (int j = 0; j <= 3; j++) {
+                valor_matriz = 0;
                 indice_coluna = 16 * (num_regioes_coluna * regiao_x + regiao_y) + 4 * i + j;
 
                 switch (tipo) {
@@ -259,7 +292,7 @@ public class MatrizInArray {
                         }
                         break;
                     case function_yy:
-                        if (j > 2) {
+                        if (j > 1) {
                             valor_matriz = j * (j - 1) * pow(intervalo_x, i) * pow(intervalo_y, j - 2);
                         }
                         break;
@@ -269,11 +302,15 @@ public class MatrizInArray {
                 System.out.printf("\nindice_coluna = %d  valor= %.0f regiao_linha = %d regiao_coluna = %d ", indice_coluna, valor_matriz, regiao_x, regiao_y);
                 if (negativo) {
                     valor_matriz *= -1;
-                    valor_vetor *= -1;
                 }
                 matrix_esparca.set(indice_linha, indice_coluna, valor_matriz);
             }
         }
+        if (negativo) {
+            valor_vetor *= -1;
+        }
+        double get_teste = resultados.get(indice_linha);
+        valor_vetor += resultados.get(indice_linha);
         resultados.set(indice_linha, valor_vetor);
     }
 
