@@ -9,7 +9,9 @@ import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import static java.lang.Math.pow;
 import java.text.NumberFormat;
+import org.la4j.LinearAlgebra;
 import org.la4j.Vector;
+import org.la4j.linear.LinearSystemSolver;
 import org.la4j.matrix.sparse.CRSMatrix;
 import org.la4j.vector.dense.BasicVector;
 
@@ -21,7 +23,8 @@ public class MatrizInArray {
 
     private double[] array;
     private CRSMatrix matrix_esparca;
-    private Vector resultados;
+    private Vector resultados,
+            polinomio;
     private int linha,
             coluna,
             linha_aux,
@@ -87,25 +90,19 @@ public class MatrizInArray {
         matrix_esparca = new CRSMatrix(num_equacao, num_equacao);
         resultados = new BasicVector(num_equacao);
 
-//        for (regiao_linha = 0; regiao_linha <= linha; regiao_linha++) {
-//            for (regiao_coluna = 0; regiao_coluna <= coluna; regiao_coluna++) {
-//
-////                for (int i = 0; i <= 1; i++) {
-////                    for (int j = 0; j <= 1; j++) {
-////                        intervalo(matriz_interpolacao, i, j);
-//                        intervalo(matriz_interpolacao, 0, 0);
-////                    }
-////                }
-//            }
-//        }
         for (linha_aux = 0; linha_aux < linha; linha_aux++) {
             for (coluna_aux = 0; coluna_aux < coluna; coluna_aux++) {
                 intervalo(linha_aux, coluna_aux);
             }
         }
 
-        System.out.print("\nNum_equacao: " + num_equacao);
-        System.out.print("\nIndices_linha: " + indice_linha);
+        System.out.printf("\nNum_equacao: %d", num_equacao);
+        System.out.printf("\nIndices_linha: %d\n", indice_linha);
+
+        pivotamento();
+
+        LinearSystemSolver solver = matrix_esparca.withSolver(LinearAlgebra.SolverFactory.JACOBI);
+        polinomio = solver.solve(resultados);
 
         createFile();
         return matriz_interpolacao;
@@ -150,7 +147,7 @@ public class MatrizInArray {
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         }
-        try (PrintStream out = new PrintStream("vetor.csv")) {
+        try (PrintStream out = new PrintStream("resultado.csv")) {
             NumberFormat nf = NumberFormat.getInstance();
             out.print(resultados.toCSV(nf));
 
@@ -163,6 +160,14 @@ public class MatrizInArray {
             out.printf("\n quantidade de Zeros : %d \n", cont_zeros);
 
             System.out.print("\nResultado: vetor.txt");
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
+        try (PrintStream out = new PrintStream("polinomio.csv")) {
+            NumberFormat nf = NumberFormat.getInstance();
+//            out.print(polinomio.toCSV(nf));
+
+            System.out.print("\nResultado: polinomio.txt");
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         }
@@ -201,16 +206,16 @@ public class MatrizInArray {
         indice_linha++;
         //PENDING
         function(ponto_x, ponto_y, equation.function);
-        if (ponto_x == 0 || ponto_x == linha) {
-            function(ponto_x, ponto_y, equation.function, regiao_linha + 1, regiao_coluna, true);
-            indice_linha++;
-            function(ponto_x, ponto_y, equation.function_x);
-            function(ponto_x, ponto_y, equation.function_x, regiao_linha + 1, regiao_coluna, true);
-        } else {
+        if (ponto_x == 0 || ponto_x == linha - 1) {
             function(ponto_x, ponto_y, equation.function, regiao_linha, regiao_coluna + 1, true);
             indice_linha++;
             function(ponto_x, ponto_y, equation.function_y);
             function(ponto_x, ponto_y, equation.function_y, regiao_linha, regiao_coluna + 1, true);
+        } else {
+            function(ponto_x, ponto_y, equation.function, regiao_linha + 1, regiao_coluna, true);
+            indice_linha++;
+            function(ponto_x, ponto_y, equation.function_x);
+            function(ponto_x, ponto_y, equation.function_x, regiao_linha + 1, regiao_coluna, true);
         }
         indice_linha++;
     }
@@ -259,7 +264,7 @@ public class MatrizInArray {
 
     private void function(int intervalo_x, int intervalo_y, equation tipo, int regiao_x, int regiao_y, boolean negativo) {
         double valor_matriz,
-                valor_vetor = (tipo == equation.function)? get(intervalo_x, intervalo_y) : 0;
+                valor_vetor = (tipo == equation.function) ? get(intervalo_x, intervalo_y) : 0;
         int num_regioes_coluna = coluna - 1;
 
         for (int i = 0; i <= 3; i++) {
@@ -267,33 +272,36 @@ public class MatrizInArray {
                 valor_matriz = 0;
                 indice_coluna = 16 * (num_regioes_coluna * regiao_x + regiao_y) + 4 * i + j;
 
+                double delta_x = (intervalo_x == regiao_x) ? 0 : intervalo_x - regiao_x,
+                        delta_y = (intervalo_y == regiao_y) ? 0 : intervalo_y - regiao_y;
+
                 switch (tipo) {
                     case function:
-                        valor_matriz = pow(intervalo_x, i) * pow(intervalo_y, j);
+                        valor_matriz = pow(delta_x, i) * pow(delta_y, j);
                         break;
                     case function_x:
                         if (i > 0) {
-                            valor_matriz = i * pow(intervalo_x, i - 1) * pow(intervalo_y, j);
+                            valor_matriz = i * pow(delta_x, i - 1) * pow(delta_y, j);
                         }
                         break;
                     case function_y:
                         if (j > 0) {
-                            valor_matriz = j * pow(intervalo_x, i) * pow(intervalo_y, j - 1);
+                            valor_matriz = j * pow(delta_x, i) * pow(delta_y, j - 1);
                         }
                         break;
                     case function_xy:
                         if (i > 0 && j > 0) {
-                            valor_matriz = i * j * pow(intervalo_x, i - 1) * pow(intervalo_y, j - 1);
+                            valor_matriz = i * j * pow(delta_x, i - 1) * pow(delta_y, j - 1);
                         }
                         break;
                     case function_xx:
                         if (i > 1) {
-                            valor_matriz = i * (i - 1) * pow(intervalo_x, i - 2) * pow(intervalo_y, j);
+                            valor_matriz = i * (i - 1) * pow(delta_x, i - 2) * pow(delta_y, j);
                         }
                         break;
                     case function_yy:
                         if (j > 1) {
-                            valor_matriz = j * (j - 1) * pow(intervalo_x, i) * pow(intervalo_y, j - 2);
+                            valor_matriz = j * (j - 1) * pow(delta_x, i) * pow(delta_y, j - 2);
                         }
                         break;
 
@@ -312,6 +320,20 @@ public class MatrizInArray {
         double get_teste = resultados.get(indice_linha);
         valor_vetor += resultados.get(indice_linha);
         resultados.set(indice_linha, valor_vetor);
+    }
+
+    private void pivotamento() {
+        for (int i = 0; i < num_equacao; i++) {
+            if (matrix_esparca.get(i, i) == 0) {
+                for (int j = i; j < num_equacao; j++) {
+                    if (matrix_esparca.get(j, i) != 0) {
+                        matrix_esparca.swapRows(i, j);
+                        resultados.swapElements(i, j);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     public double[] getArray() {
