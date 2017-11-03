@@ -24,7 +24,8 @@ public class MatrizInArray {
     private double[] array;
     private CRSMatrix matrix_esparca;
     private Vector resultados,
-            polinomio;
+            polinomio,
+            index_col;
     private int linha,
             coluna,
             linha_aux,
@@ -50,6 +51,10 @@ public class MatrizInArray {
         this.num_equacao = 16 * (linha - 1) * (coluna - 1);
         this.array = new double[linha * coluna];
         this.indice_linha = 0;
+        index_col = new BasicVector(num_equacao);
+        for (int i = 0; i < coluna; i++) {
+            index_col.set(i, i);
+        }
     }
 
     public void add(int indice_linha, int indice_coluna, double valor) {
@@ -101,9 +106,8 @@ public class MatrizInArray {
 
         pivotamento();
 
-        LinearSystemSolver solver = matrix_esparca.withSolver(LinearAlgebra.SolverFactory.JACOBI);
-        polinomio = solver.solve(resultados);
-
+//        LinearSystemSolver solver = matrix_esparca.withSolver(LinearAlgebra.SolverFactory.JACOBI);
+//        polinomio = solver.solve(resultados);
         createFile();
         return matriz_interpolacao;
     }
@@ -272,8 +276,12 @@ public class MatrizInArray {
                 valor_matriz = 0;
                 indice_coluna = 16 * (num_regioes_coluna * regiao_x + regiao_y) + 4 * i + j;
 
-                double delta_x = (intervalo_x == regiao_x) ? 0 : intervalo_x - regiao_x,
-                        delta_y = (intervalo_y == regiao_y) ? 0 : intervalo_y - regiao_y;
+                double delta_x = 
+//                        intervalo_x,
+                        (intervalo_x == regiao_x) ? 0 : intervalo_x - regiao_x,
+                        delta_y = 
+//                        intervalo_y;
+                        (intervalo_y == regiao_y) ? 0 : intervalo_y - regiao_y;
 
                 switch (tipo) {
                     case function:
@@ -323,16 +331,74 @@ public class MatrizInArray {
     }
 
     private void pivotamento() {
-        for (int i = 0; i < num_equacao; i++) {
-            if (matrix_esparca.get(i, i) == 0) {
-                for (int j = i; j < num_equacao; j++) {
-                    if (matrix_esparca.get(j, i) != 0) {
-                        matrix_esparca.swapRows(i, j);
-                        resultados.swapElements(i, j);
-                        break;
+//        pivotamentoSimples(false);
+//        pivoteamentoParcial();
+        pivoteamentoCompleto();
+    }
+
+    private void pivotamentoSimples(boolean invertido) {
+        if (invertido) {
+            for (int i = num_equacao - 1; i >= 0; i--) {
+                if (matrix_esparca.get(i, i) == 0) {
+                    for (int j = i; j >= 0; j--) {
+                        if (matrix_esparca.get(j, i) != 0) {
+                            matrix_esparca.swapRows(i, j);
+                            resultados.swapElements(i, j);
+                            break;
+                        }
                     }
                 }
             }
+        } else {
+            for (int i = 0; i < num_equacao; i++) {
+                if (matrix_esparca.get(i, i) == 0) {
+                    for (int j = i; j < num_equacao; j++) {
+                        if (matrix_esparca.get(j, i) != 0) {
+                            matrix_esparca.swapRows(i, j);
+                            resultados.swapElements(i, j);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void pivoteamentoParcial() {
+        for (int i = 0; i < matrix_esparca.rows(); i++) {
+            int linha_index = i;
+            for (int j = i; j < matrix_esparca.rows(); j++) {
+                if (matrix_esparca.get(j, i) != 0 && matrix_esparca.get(j, i) > matrix_esparca.get(i, i)) {
+                    linha_index = j;
+                }
+            }
+            matrix_esparca.swapRows(i, linha_index);
+            resultados.swapElements(i, linha_index);
+        }
+    }
+
+    private void pivoteamentoCompleto() {
+        for (int i = 0; i < matrix_esparca.rows(); i++) {
+            int linha_index = i,
+                    coluna_index = i;
+            for (int j = i; j < matrix_esparca.rows(); j++) {
+                for (int k = i; k < matrix_esparca.columns(); k++) {
+                    if (matrix_esparca.get(j, k) != 0) {
+                        if (matrix_esparca.get(j, k) > matrix_esparca.get(linha_index, coluna_index)) {
+                            linha_index = j;
+                            coluna_index = k;
+                        } else if (matrix_esparca.get(linha_index, coluna_index) == 0) {
+                            linha_index = j;
+                            coluna_index = k;
+                        }
+                    }
+                }
+            }
+            matrix_esparca.swapRows(i, linha_index);
+            resultados.swapElements(i, linha_index);
+
+            matrix_esparca.swapColumns(i, coluna_index);
+            index_col.swapElements(i, coluna_index);
         }
     }
 
