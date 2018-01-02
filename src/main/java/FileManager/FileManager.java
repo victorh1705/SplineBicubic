@@ -5,17 +5,19 @@
  */
 package FileManager;
 
+import Estruturas.Matriz;
 import Estruturas.MatrizInArray;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
 import org.la4j.matrix.MatrixFactory;
 import org.la4j.matrix.sparse.CRSMatrix;
 
 /**
- *
  * @author voitt
  */
 public class FileManager {
@@ -24,8 +26,11 @@ public class FileManager {
     private int numLinha;
     private int numColuna;
 
+    InputStream is;
+    InputStreamReader isr;
+
     public FileManager(String name) {
-        this.path = name;
+        this.path = name + ".txt";
         numColuna = 0;
         numLinha = 0;
     }
@@ -38,15 +43,15 @@ public class FileManager {
         this.path = path;
     }
 
-    public void leituraArquivo() {
+    public Matriz leituraArquivo() throws IOException {
         leituraInicial();
-        leituraDados();
+        return leituraDados();
     }
 
-    private void leituraInicial() {
+    private void leituraInicial() throws IOException {
         try {
-            InputStream is = new FileInputStream(path);
-            InputStreamReader isr = new InputStreamReader(is);
+            is = new FileInputStream(path);
+            isr = new InputStreamReader(is);
             try (BufferedReader reader = new BufferedReader(isr)) {
                 String linha = reader.readLine();
 
@@ -64,23 +69,24 @@ public class FileManager {
             System.out.println("numLinha = " + numLinha);
         } catch (IOException e) {
             System.out.println("Erro ao tentar ler o arquivo " + e);
+        } finally {
+            close();
         }
     }
 
-    public MatrizInArray leituraDados() {
+    public Matriz leituraDados() throws IOException {
         try {
-            InputStream is = new FileInputStream(path);
-            InputStreamReader isr = new InputStreamReader(is);
+            is = new FileInputStream(path);
+            isr = new InputStreamReader(is);
             try (BufferedReader reader = new BufferedReader(isr)) {
 
-                MatrizInArray matriz = new MatrizInArray(numLinha, numColuna);
+                Matriz matriz = new Matriz(numLinha, numColuna);
                 String linha = reader.readLine();
                 String[] coluna = null;
 
                 int indiceLinha = 0;
 
                 while (linha != null) {
-                    linha = reader.readLine();
                     if (linha != null) {
                         coluna = linha.split(" ");
                     }
@@ -90,20 +96,28 @@ public class FileManager {
                     for (String col : coluna) {
                         int indice = numColuna * indiceLinha + indiceColuna;
 
-                        System.out.printf("\nIndice coluna: %d", indice);
-                        
-                        matriz.add(indiceLinha, indiceColuna, Double.valueOf(col));
+                        System.out.printf("\nIndice coluna: %d valor %s", indice, col);
+
+                        matriz.set(indiceLinha, indiceColuna, Double.valueOf(col));
                         indiceColuna++;
                     }
 
                     indiceLinha++;
+                    linha = reader.readLine();
                 }
 
                 return matriz;
             }
         } catch (IOException e) {
             System.out.println("Erro ao tentar ler o arquivo " + e);
+        } finally {
+            close();
         }
         return null;
+    }
+
+    private void close() throws IOException {
+        is.close();
+        isr.close();
     }
 }

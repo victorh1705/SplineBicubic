@@ -1,4 +1,6 @@
 target/
+.idea/
+
 *.txt
 *.csv
 nbactions.xml

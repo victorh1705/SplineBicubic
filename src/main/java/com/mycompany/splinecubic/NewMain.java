@@ -5,6 +5,7 @@
  */
 package com.mycompany.splinecubic;
 
+import Estruturas.Matriz;
 import FileManager.FileManager;
 import Estruturas.MatrizInArray;
 import org.la4j.LinearAlgebra;
@@ -14,13 +15,15 @@ import org.la4j.linear.LinearSystemSolver;
 import org.la4j.matrix.dense.Basic2DMatrix;
 import org.la4j.vector.dense.BasicVector;
 
+import java.io.IOException;
+
 /**
  *
  * @author voitt
  */
 public class NewMain {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         criacaoMatriz();
 //        ma.createFile();
@@ -43,15 +46,14 @@ public class NewMain {
         System.out.println(polinomio.toCSV());
     }
 
-    private static void criacaoMatriz() {
-        FileManager fm = new FileManager("teste.txt");
+    private static void criacaoMatriz() throws IOException {
+        FileManager fm = new FileManager("teste");
 
-        fm.leituraArquivo();
+        Matriz data_matriz = fm.leituraArquivo();
 
-        MatrizInArray matriz_dados = fm.leituraDados();
+        int indices = data_matriz.columns() * data_matriz.rows();
 
-        int indices = matriz_dados.getColuna() * matriz_dados.getLinha();
-
-        MatrizInArray ma = matriz_dados.criaMatrizInterpolacao();
+        System.out.print("\n "+data_matriz.toCSV());
+//        MatrizInArray ma = data_matriz.criaMatrizInterpolacao();
     }
 }

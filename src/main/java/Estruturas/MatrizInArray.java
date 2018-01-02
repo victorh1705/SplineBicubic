@@ -9,9 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import static java.lang.Math.pow;
 import java.text.NumberFormat;
-import org.la4j.LinearAlgebra;
 import org.la4j.Vector;
-import org.la4j.linear.LinearSystemSolver;
 import org.la4j.matrix.sparse.CRSMatrix;
 import org.la4j.vector.dense.BasicVector;
 
