@@ -5,9 +5,8 @@
  */
 package com.mycompany.splinecubic;
 
-import Estruturas.Matriz;
+import Structure.Matriz;
 import FileManager.FileManager;
-import Estruturas.MatrizInArray;
 import org.la4j.LinearAlgebra;
 import org.la4j.Matrix;
 import org.la4j.Vector;
@@ -51,7 +50,7 @@ public class NewMain {
 
         Matriz data_matriz = fm.leituraArquivo();
 
-        int indices = data_matriz.columns() * data_matriz.rows();
+//        int indices = data_matriz.columns() * data_matriz.rows();
 
         System.out.print("\n "+data_matriz.toCSV());
 //        MatrizInArray ma = data_matriz.criaMatrizInterpolacao();

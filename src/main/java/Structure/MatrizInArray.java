@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Estruturas;
+package Structure;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
@@ -17,6 +17,7 @@ import org.la4j.vector.dense.BasicVector;
  *
  * @author voitt
  */
+@SuppressWarnings("Duplicates")
 public class MatrizInArray {
 
     private double[] array;
@@ -255,7 +256,6 @@ public class MatrizInArray {
     /**
      * Insere os valores de A*x*y na matriz
      *
-     * @param matriz_interpolacao
      * @param intervalo_x
      * @param intervalo_y
      * @param tipo

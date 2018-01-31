@@ -5,34 +5,50 @@
  */
 package FileManager;
 
-import Estruturas.Matriz;
-import Estruturas.MatrizInArray;
+import Structure.Matriz;
+import org.la4j.Matrix;
+import org.la4j.Vector;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import org.la4j.matrix.MatrixFactory;
-import org.la4j.matrix.sparse.CRSMatrix;
+import java.io.*;
+import java.text.NumberFormat;
 
 /**
  * @author voitt
  */
+@SuppressWarnings("Duplicates")
 public class FileManager {
 
     private String path;
     private int numLinha;
     private int numColuna;
 
-    InputStream is;
-    InputStreamReader isr;
+    private InputStream is;
+    private InputStreamReader isr;
 
     public FileManager(String name) {
         this.path = name + ".txt";
         numColuna = 0;
         numLinha = 0;
+    }
+
+    public static void createFile(String path, Vector vector) {
+        try (PrintStream out = new PrintStream(path + ".csv")) {
+            NumberFormat nf = NumberFormat.getInstance();
+            out.print(vector.toCSV(nf));
+            System.out.printf("\nArquivo %s criado", path);
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void createFile(String path, Matrix matrix) {
+        try (PrintStream out = new PrintStream(path + ".csv")) {
+            NumberFormat nf = NumberFormat.getInstance();
+            out.print(matrix.toCSV(nf));
+            System.out.printf("\nArquivo %s criado", path);
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public String getPath() {
@@ -74,7 +90,7 @@ public class FileManager {
         }
     }
 
-    public Matriz leituraDados() throws IOException {
+    private Matriz leituraDados() throws IOException {
         try {
             is = new FileInputStream(path);
             isr = new InputStreamReader(is);
@@ -82,23 +98,23 @@ public class FileManager {
 
                 Matriz matriz = new Matriz(numLinha, numColuna);
                 String linha = reader.readLine();
-                String[] coluna = null;
+                String[] coluna;
 
                 int indiceLinha = 0;
 
                 while (linha != null) {
-                    if (linha != null) {
-                        coluna = linha.split(" ");
-                    }
+                    coluna = linha.split(" ");
 
                     int indiceColuna = 0;
 
                     for (String col : coluna) {
                         int indice = numColuna * indiceLinha + indiceColuna;
 
-                        System.out.printf("\nIndice coluna: %d valor %s", indice, col);
+                        System.out.printf("\nIndice coluna: %d valor %s",
+                                indice, col);
 
-                        matriz.set(indiceLinha, indiceColuna, Double.valueOf(col));
+                        matriz.set(indiceLinha, indiceColuna,
+                                Double.valueOf(col));
                         indiceColuna++;
                     }
 
