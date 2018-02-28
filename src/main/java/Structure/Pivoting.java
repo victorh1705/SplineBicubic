@@ -17,7 +17,7 @@ public class Pivoting {
      * @param matrix SparseMatrix that will be pivoted
      * @param vector Vector that multiply the Matrix
      */
-    public static void Simple(SparseMatrix matrix, Vector vector, boolean
+    public static void Basic(SparseMatrix matrix, Vector vector, boolean
             invertido) {
 
         int number_equations = vector.length();

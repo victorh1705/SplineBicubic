@@ -179,7 +179,6 @@ public class MatrizInArray {
     /**
      * Insere todas as condições do vertice
      *
-     * @param matriz_interpolacao
      * @param ponto_x
      * @param ponto_y
      */
