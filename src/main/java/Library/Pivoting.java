@@ -64,7 +64,7 @@ public class Pivoting {
             int line = i;
             for (int j = i; j < matrix.rows(); j++) {
                 if (matrix.get(j, i) != 0 &&
-                    matrix.get(j, i) > matrix.get(i, i)) {
+                    matrix.get(j, i) > matrix.get(line, i)) {
                     line = j;
                 }
             }
