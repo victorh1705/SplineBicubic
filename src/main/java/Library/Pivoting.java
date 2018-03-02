@@ -60,7 +60,7 @@ public class Pivoting {
      */
     public static void Parcial(SparseMatrix matrix, Vector vector) {
 
-        for (int i = 0; i < matrix.rows(); i++) {
+        for (int i = 0; i < matrix.columns(); i++) {
             int line = i;
             for (int j = i; j < matrix.rows(); j++) {
                 if (matrix.get(j, i) != 0 &&

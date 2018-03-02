@@ -115,6 +115,7 @@ public class PolinomioBuilder {
             line++;
             function(row, column, equation.function_xy, row_region + 1,
                     col_region, false);
+
         }
         line++;
     }
@@ -191,33 +192,27 @@ public class PolinomioBuilder {
     }
 
     //TODO: Resolver Function para derivada segunda
-    protected void function(int intervalo_x, int intervalo_y, equation tipo,
+    protected void function(int intervalo_x, int intervalo_y, equation type,
             int x_region, int y_region, boolean negative) {
-        double matriz_value,
 
-                //Get values from function, if is not a derivate
-                value_vector =
-                        (tipo == equation.function) ? matriz.get(intervalo_x,
-                                intervalo_y) : 0;
-
-        int num_regioes_coluna = matriz.columns() - 1;
+        int num_cols_regions = matriz.columns() - 1;
 
         for (int i = 0; i <= 3; i++) {
             for (int j = 0; j <= 3; j++) {
-                matriz_value = 0;
-                int column = 16 * (num_regioes_coluna * x_region + y_region) +
+                double matriz_value = 0;
+                int column = 16 * (num_cols_regions * x_region + y_region) +
                              4 * i + j;
 
 //              intervalo_x,
-                double delta_x =
-                        (intervalo_x == x_region) ? 0 : intervalo_x - x_region,
+                double delta_x = intervalo_x,
+//                        (intervalo_x == x_region) ? 0 : intervalo_x - x_region,
 //              intervalo_y;
-                        delta_y =
-                                (intervalo_y == y_region) ? 0 :
-                                intervalo_y - y_region;
+                        delta_y = intervalo_y;
+//                                (intervalo_y == y_region) ? 0 :
+//                                intervalo_y - y_region;
 
                 //noinspection Duplicates
-                switch (tipo) {
+                switch (type) {
                     case function:
                         matriz_value = pow(delta_x, i) * pow(delta_y, j);
                         break;
@@ -261,11 +256,47 @@ public class PolinomioBuilder {
                 sparce_matriz.set(line, column, matriz_value);
             }
         }
-        if (negative) value_vector *= -1;
 
         //trocar array abaixo value_b -> results
-        value_vector += value_b.get(line);// increment the value
-        value_b.set(line, value_vector);// Update
+        double value = CalculateValueB(negative, type, intervalo_x,
+                intervalo_y);
+        value_b.set(line, value);
+    }
+
+
+    private double CalculateValueB(boolean negative, equation type,
+            int x, int y) {
+        double retorno = 0;
+        if (type == equation.function) {
+            retorno = matriz.get(x, y);
+        } else if (type == equation.function_xy) {
+            if (null != matriz.getType_point(x, y)) {
+                int x_big = (x < matriz.columns() - 1) ? x + 1 : x,
+                        x_small = (x > 0) ? x - 1 : 0,
+                        y_big = (y < matriz.columns() - 1) ? y + 1 : y,
+                        y_small = (y > 0) ? y - 1 : 0;
+
+                retorno = matriz.get(x_big, y_big) + matriz.get(x_small,
+                        y_small) - matriz.get(x_big, y_small) - matriz.get
+                        (x_small, y_big);
+                retorno = retorno / (pow(1, 2));
+
+                if (matriz.getType_point(x, y) ==
+                    Matriz.typePoint.edge) {
+                    retorno = retorno / 2;
+                }
+
+            }
+
+            if (negative) {
+                retorno *= -1;
+            }
+
+            //add to the existing value
+            retorno += value_b.get(line);
+            return retorno;
+        }
+        return retorno;
     }
 
 

@@ -44,7 +44,7 @@ public class PolinomioSolver extends PolinomioBuilder{
         FileManager.createFile("resultado", value_b);
 
         return sparce_matriz.withSolver(
-                LinearAlgebra.SolverFactory.JACOBI)
+                LinearAlgebra.SolverFactory.GAUSSIAN)
                 .solve(value_b);
 
     }
