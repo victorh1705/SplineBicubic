@@ -42,15 +42,12 @@ public class PolinomioBuilder {
         switch (matriz.getType_point(row, column)) {
             case vertex:
                 vertex(row, column);
-//                line += 4;
                 break;
             case edge:
                 edge(row, column);
-//                line += 8;
                 break;
             case intern:
                 intern(row, column);
-//                line += 16;
                 break;
         }
 
@@ -72,24 +69,24 @@ public class PolinomioBuilder {
         line++;
         function(row, column, equation.function_xy);
         line++;
-//        function(row, column, equation.function);
+        function(row, column, equation.function);
         if (row == 0 || row == matriz.rows() - 1) { //X axis
             function(row, column, equation.function, row_region, col_region + 1,
                     false);
             line++;
             //paralela
-            function(row, column, equation.function_x);
-            function(row, column, equation.function_x, row_region,
+            function(row, column, equation.function_y);
+            function(row, column, equation.function_y, row_region,
                     col_region + 1, true);
             line++;
-            function(row, column, equation.function_xx);
-            function(row, column, equation.function_xx, row_region,
+            function(row, column, equation.function_yy);
+            function(row, column, equation.function_yy, row_region,
                     col_region + 1, true);
             line++;
             //perpendicular
-            function(row, column, equation.function_y);
+            function(row, column, equation.function_x);
             line++;
-            function(row, column, equation.function_yy, row_region,
+            function(row, column, equation.function_xx, row_region,
                     col_region + 1, false);
             line++;
             function(row, column, equation.function_xy, row_region,
@@ -99,18 +96,18 @@ public class PolinomioBuilder {
                     false);
             line++;
             //paralela
-            function(row, column, equation.function_y);
-            function(row, column, equation.function_y, row_region + 1,
+            function(row, column, equation.function_x);
+            function(row, column, equation.function_x, row_region + 1,
                     col_region, true);
             line++;
-            function(row, column, equation.function_yy);
-            function(row, column, equation.function_yy, row_region + 1,
+            function(row, column, equation.function_xx);
+            function(row, column, equation.function_xx, row_region + 1,
                     col_region, true);
             line++;
             //perpendicular
-            function(row, column, equation.function_x);
+            function(row, column, equation.function_y);
             line++;
-            function(row, column, equation.function_xx, row_region + 1,
+            function(row, column, equation.function_yy, row_region + 1,
                     col_region, false);
             line++;
             function(row, column, equation.function_xy, row_region + 1,
@@ -129,13 +126,13 @@ public class PolinomioBuilder {
 
         for (int i = 0; i <= 1; i++) {
             for (int j = 0; j <= 1; j++) {
-                if (i != 0 && j != 0) {
+                if (i != 0 || j != 0) {
                     function(row, column, equation.function, row_region + i,
-                            col_region + j, true);
+                            col_region + j, false);
                     line++;
 
                     function(row, column, equation.function_xy, row_region + i,
-                            col_region + j, true);
+                            col_region + j, false);
                     line++;
                 }
             }

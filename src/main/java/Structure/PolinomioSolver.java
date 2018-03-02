@@ -39,7 +39,7 @@ public class PolinomioSolver extends PolinomioBuilder{
         }
 
         // create
-        Pivoting.Parcial(sparce_matriz,value_b);
+//        Pivoting.Parcial(sparce_matriz,value_b);
         FileManager.createFile("saida", sparce_matriz);
         FileManager.createFile("resultado", value_b);
 
