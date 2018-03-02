@@ -1,13 +1,18 @@
 package Structure;
 
 import FileManager.FileManager;
+import Library.Pivoting;
 import org.la4j.LinearAlgebra;
 import org.la4j.Vector;
 import org.la4j.matrix.sparse.CRSMatrix;
 import org.la4j.vector.dense.BasicVector;
 
-public class PolinomioSolver {
+public class PolinomioSolver extends PolinomioBuilder{
 
+
+    public PolinomioSolver(Matriz matriz) {
+        super(matriz);
+    }
 
     /**
      * This function builds a Sparse matrix based on the initial matrix. Then
@@ -18,25 +23,25 @@ public class PolinomioSolver {
      *
      * @return Vector - Result of Spline Bicubic
      */
-    public Vector polinomioSolver(Matriz matriz) {
+    public Vector solver() {
 
         final int matriz_size =
                 16 * (matriz.rows() - 1) * (matriz.columns() - 1);
 
-        CRSMatrix sparce_matriz = new CRSMatrix(matriz_size, matriz_size);
-        BasicVector value_b = new BasicVector(matriz_size);
-        PolinomioBuilder pb = new PolinomioBuilder(matriz);
+        sparce_matriz = new CRSMatrix(matriz_size, matriz_size);
+         value_b = new BasicVector(matriz_size);
 
         for (int row = 0; row < matriz.rows(); row++) {
             //TODO: Analisar intervalos em MatrizInArray
             for (int column = 0; column < matriz.columns(); column++) {
-                pb.interval(row, column);
+                interval(row, column);
             }
         }
 
         // create
-//        Pivoting.Parcial(sparce_matriz,value_b);
+        Pivoting.Parcial(sparce_matriz,value_b);
         FileManager.createFile("saida", sparce_matriz);
+        FileManager.createFile("resultado", value_b);
 
         return sparce_matriz.withSolver(
                 LinearAlgebra.SolverFactory.JACOBI)

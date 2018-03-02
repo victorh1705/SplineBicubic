@@ -8,6 +8,7 @@ package com.mycompany.splinecubic;
 import Structure.Matriz;
 import FileManager.FileManager;
 import Structure.PolinomioBuilder;
+import Structure.PolinomioSolver;
 import org.la4j.LinearAlgebra;
 import org.la4j.Matrix;
 import org.la4j.Vector;
@@ -51,13 +52,13 @@ public class NewMain {
 
         Matriz data_matriz = fm.leituraArquivo();
 
-        PolinomioBuilder pb = new PolinomioBuilder(data_matriz);
-        Vector resultado = pb.polinomioSolver();
+        PolinomioSolver ps = new PolinomioSolver(data_matriz);
+        Vector resultado = ps.solver();
 
 //        int indices = data_matriz.columns() * data_matriz.rows();
 
-        fm.createFile("saida", pb.getSparce_matriz());
-        fm.createFile("resultado",pb.getValue_b());
+        fm.createFile("saida", ps.getSparce_matriz());
+        fm.createFile("resultado",ps.getValue_b());
 
         System.out.print("\n "+data_matriz.toCSV());
 //        MatrizInArray ma = data_matriz.criaMatrizInterpolacao();

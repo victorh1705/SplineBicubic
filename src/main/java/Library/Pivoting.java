@@ -1,9 +1,9 @@
-package Structure;
+package Library;
 
 import org.la4j.Vector;
 import org.la4j.matrix.SparseMatrix;
 
-@SuppressWarnings("Duplicates")
+
 public class Pivoting {
 
 
@@ -59,6 +59,7 @@ public class Pivoting {
      * @param vector Vector that multiply the Matrix
      */
     public static void Parcial(SparseMatrix matrix, Vector vector) {
+
         for (int i = 0; i < matrix.rows(); i++) {
             int line = i;
             for (int j = i; j < matrix.rows(); j++) {
