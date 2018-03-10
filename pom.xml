@@ -18,5 +18,13 @@
             <artifactId>la4j</artifactId>
             <version>0.6.0</version>
         </dependency>
+
+
+        <!--Jxls - API for excel-->
+        <dependency>
+            <groupId>org.jxls</groupId>
+            <artifactId>jxls</artifactId>
+            <version>RELEASE</version>
+        </dependency>
     </dependencies>
 </project>

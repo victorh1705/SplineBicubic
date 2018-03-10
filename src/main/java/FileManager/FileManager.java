@@ -11,6 +11,7 @@ import org.la4j.Vector;
 
 import java.io.*;
 import java.text.NumberFormat;
+import java.util.Locale;
 
 /**
  * @author voitt
@@ -33,8 +34,8 @@ public class FileManager {
 
     public static void createFile(String path, Vector vector) {
         try (PrintStream out = new PrintStream(path + ".csv")) {
-            NumberFormat nf = NumberFormat.getInstance();
-            out.print(vector.toCSV(nf));
+            out.print(vector.toCSV(NumberFormat.getInstance
+                    (Locale.US)));
             System.out.printf("\nArquivo %s criado", path);
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
@@ -43,8 +44,7 @@ public class FileManager {
 
     public static void createFile(String path, Matrix matrix) {
         try (PrintStream out = new PrintStream(path + ".csv")) {
-            NumberFormat nf = NumberFormat.getInstance();
-            out.print(matrix.toCSV(nf));
+            out.print(matrix.toCSV(NumberFormat.getInstance()));
             System.out.printf("\nArquivo %s criado", path);
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();

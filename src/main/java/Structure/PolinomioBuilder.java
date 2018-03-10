@@ -42,12 +42,15 @@ public class PolinomioBuilder {
         switch (matriz.getType_point(row, column)) {
             case vertex:
                 vertex(row, column);
+//                line += 4;
                 break;
             case edge:
-                edge(row, column);
+//                edge(row, column);
+                line += 8;
                 break;
             case intern:
-                intern(row, column);
+//                intern(row, column);
+                line += 16;
                 break;
         }
 
@@ -188,8 +191,8 @@ public class PolinomioBuilder {
                 false);
     }
 
-    //TODO: Resolver Function para derivada segunda
-    protected void function(int intervalo_x, int intervalo_y, equation type,
+    protected void function(int intervalo_x, int intervalo_y,
+            equation type,
             int x_region, int y_region, boolean negative) {
 
         int num_cols_regions = matriz.columns() - 1;
@@ -266,33 +269,34 @@ public class PolinomioBuilder {
         double retorno = 0;
         if (type == equation.function) {
             retorno = matriz.get(x, y);
-        } else if (type == equation.function_xy) {
-            if (null != matriz.getType_point(x, y)) {
-                int x_big = (x < matriz.columns() - 1) ? x + 1 : x,
-                        x_small = (x > 0) ? x - 1 : 0,
-                        y_big = (y < matriz.columns() - 1) ? y + 1 : y,
-                        y_small = (y > 0) ? y - 1 : 0;
-
-                retorno = matriz.get(x_big, y_big) + matriz.get(x_small,
-                        y_small) - matriz.get(x_big, y_small) - matriz.get
-                        (x_small, y_big);
-                retorno = retorno / (pow(1, 2));
-
-                if (matriz.getType_point(x, y) ==
-                    Matriz.typePoint.edge) {
-                    retorno = retorno / 2;
-                }
-
-            }
-
-            if (negative) {
-                retorno *= -1;
-            }
-
-            //add to the existing value
-            retorno += value_b.get(line);
-            return retorno;
         }
+//        else if (type == equation.function_xy) {
+//            if (null != matriz.getType_point(x, y)) {
+//                int x_big = (x < matriz.columns() - 1) ? x + 1 : x,
+//                        x_small = (x > 0) ? x - 1 : 0,
+//                        y_big = (y < matriz.columns() - 1) ? y + 1 : y,
+//                        y_small = (y > 0) ? y - 1 : 0;
+//
+//                retorno = matriz.get(x_big, y_big) + matriz.get(x_small,
+//                        y_small) - matriz.get(x_big, y_small) - matriz.get
+//                        (x_small, y_big);
+//                retorno = retorno / (pow(1, 2));
+//
+//                if (matriz.getType_point(x, y) ==
+//                    Matriz.typePoint.edge) {
+//                    retorno = retorno / 2;
+//                }
+//
+//            }
+//
+//            if (negative) {
+//                retorno *= -1;
+//            }
+//
+//            //add to the existing value
+//            retorno += value_b.get(line);
+//            return retorno;
+//        }
         return retorno;
     }
 

@@ -1,18 +1,14 @@
 package Structure;
 
+import org.la4j.Vector;
 import org.la4j.matrix.dense.Basic2DMatrix;
+
+import static java.lang.Math.pow;
 
 public class Matriz extends Basic2DMatrix {
 
-    public enum typePoint {
-        vertex,
-        edge,
-        intern
-    }
-
     private double[] value_x;
     private double[] value_y;
-
     private typePoint[][] type_point;
 
     public Matriz(int x, int y) {
@@ -31,15 +27,70 @@ public class Matriz extends Basic2DMatrix {
         }
     }
 
-
-
     public Matriz(double[] x, double[] y) {
         super(x.length, y.length);
         value_x = x;
         value_y = y;
 
         type_point = new typePoint[x.length][y.length];
-        buildTypePoint(x.length,y.length);
+        buildTypePoint(x.length, y.length);
+    }
+
+    public static double valorZ(Matriz matriz, Vector polinomio, double x,
+            double y) {
+        double valor = 0;
+
+        int int_X = (int) x;
+        int int_Y = (int) y;
+
+        int x_index =
+                (!(int_X >= 1)) ? int_X :
+                int_X - 1;
+        int y_index =
+                (!(int_Y >= 1)) ? int_Y :
+                int_Y - 1;
+
+        int first_term = 16 * ((matriz.rows() - 1) * x_index + y_index);
+
+        for (int i = 0; i <= 3; i++) {
+            for (int j = 0; j <= 3; j++) {
+                valor += (pow(x, i)) * (pow(y, j)) *
+                         polinomio.get(first_term + (4 * i + j));
+            }
+        }
+
+        System.out.printf("\nValor(%.2f,%.2f) = %.2f  Regiao X=%d, Y=%d ", x,
+                y,
+                valor, x_index, y_index);
+        return valor;
+    }
+
+    public static double valorZ2(Matriz matriz, Vector polinomio, double x,
+            double y) {
+        double valor = 0;
+
+        int int_X = (int) x;
+        int int_Y = (int) y;
+
+        int x_index = (!(int_X == matriz.rows() - 1)) ? int_X :
+                      int_X - 1;
+        int y_index = (!(int_Y == matriz.columns() - 1)) ? int_Y :
+                      int_Y - 1;
+
+        int first_term = 16 * ((matriz.rows() - 1) * x_index + y_index);
+
+        for (int i = 0; i <= 3; i++) {
+            for (int j = 0; j <= 3; j++) {
+                valor += (pow(x, i)) * (pow(y, j)) *
+                         polinomio.get(first_term + (4 * i + j));
+            }
+        }
+
+        System.out.printf("\nValor 2 (%.2f,%.2f) = %.2f  Regiao X=%d, Y=%d " +
+                          "", x,
+                y,
+                valor, x_index, y_index);
+        return valor;
     }
 
     public typePoint getType_point(int x, int y) {
@@ -66,13 +117,19 @@ public class Matriz extends Basic2DMatrix {
         }
     }
 
-
     @Override
     protected void ensureDimensionsAreCorrect(int rows, int columns) {
         super.ensureDimensionsAreCorrect(rows, columns);
         if (rows < 3 && columns < 3)
             this.fail("The size of rows(" + rows + ") and columns (" +
-                    columns + ") must be at the minimum of 3");
+                      columns + ") must be at the minimum of 3");
 
+    }
+
+
+    public enum typePoint {
+        vertex,
+        edge,
+        intern
     }
 }
