@@ -31,7 +31,7 @@ public class PolinomioSolver extends PolinomioBuilder {
 
         for (int row = 0; row < matriz.rows(); row++) {
             for (int column = 0; column < matriz.columns(); column++) {
-                interval(row, column);
+                interval(column, row);
             }
         }
 

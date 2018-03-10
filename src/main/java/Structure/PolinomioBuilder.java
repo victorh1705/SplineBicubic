@@ -30,10 +30,10 @@ public class PolinomioBuilder {
     /**
      * Define the caracteristics of the point for a futher use of it
      *
-     * @param row    row's index
      * @param column column's index
+     * @param row    row's index
      */
-    public void interval(int row, int column) {
+    public void interval(int column, int row) {
 
         row_region = (row > 0) ? row - 1 : 0;
         col_region = (column > 0) ? column - 1 : 0;
@@ -41,53 +41,52 @@ public class PolinomioBuilder {
         // Otimizar os métodos interno, vértice e ponto
         switch (matriz.getType_point(row, column)) {
             case vertex:
-                vertex(row, column);
+                vertex(column, row);
 //                line += 4;
                 break;
             case edge:
-//                edge(row, column);
-                line += 8;
+                edge(column, row);
+//                line += 8;
                 break;
             case intern:
-//                intern(row, column);
-                line += 16;
+                intern(column, row);
+//                line += 16;
                 break;
         }
 
     }
 
-    protected void vertex(int row, int column) {
-        function(row, column, equation.function);
+    protected void vertex(int column, int row) {
+        function(column, row, equation.function);
         line++;
-        function(row, column, equation.function_xx);
+        function(column, row, equation.function_xx);
         line++;
-        function(row, column, equation.function_yy);
+        function(column, row, equation.function_yy);
         line++;
-        function(row, column, equation.function_xy);
+        function(column, row, equation.function_xy);
         line++;
     }
 
-    protected void edge(int row, int column) {
-        function(row, column, equation.function);
+    protected void edge(int column, int row) {
+        function(column, row, equation.function);
         line++;
-        function(row, column, equation.function_xy);
+        function(column, row, equation.function_xy);
         line++;
-        function(row, column, equation.function);
         if (row == 0 || row == matriz.rows() - 1) { //X axis
             function(row, column, equation.function, row_region, col_region + 1,
                     false);
             line++;
             //paralela
-            function(row, column, equation.function_y);
+            function(column, row, equation.function_y);
             function(row, column, equation.function_y, row_region,
                     col_region + 1, true);
             line++;
-            function(row, column, equation.function_yy);
+            function(column, row, equation.function_yy);
             function(row, column, equation.function_yy, row_region,
                     col_region + 1, true);
             line++;
             //perpendicular
-            function(row, column, equation.function_x);
+            function(column, row, equation.function_x);
             line++;
             function(row, column, equation.function_xx, row_region,
                     col_region + 1, false);
@@ -99,16 +98,16 @@ public class PolinomioBuilder {
                     false);
             line++;
             //paralela
-            function(row, column, equation.function_x);
+            function(column, row, equation.function_x);
             function(row, column, equation.function_x, row_region + 1,
                     col_region, true);
             line++;
-            function(row, column, equation.function_xx);
+            function(column, row, equation.function_xx);
             function(row, column, equation.function_xx, row_region + 1,
                     col_region, true);
             line++;
             //perpendicular
-            function(row, column, equation.function_y);
+            function(column, row, equation.function_y);
             line++;
             function(row, column, equation.function_yy, row_region + 1,
                     col_region, false);
@@ -120,11 +119,11 @@ public class PolinomioBuilder {
         line++;
     }
 
-    protected void intern(int row, int column) {
+    protected void intern(int column, int row) {
 
-        function(row, column, equation.function);
+        function(column, row, equation.function);
         line++;
-        function(row, column, equation.function_xy);
+        function(column, row, equation.function_xy);
         line++;
 
         for (int i = 0; i <= 1; i++) {
@@ -141,7 +140,7 @@ public class PolinomioBuilder {
             }
         }
 
-        function(row, column, equation.function_x);
+        function(column, row, equation.function_x);
         function(row, column, equation.function_x, row_region + 1, col_region,
                 true);
         line++;
@@ -151,7 +150,7 @@ public class PolinomioBuilder {
                 col_region + 1, true);
         line++;
 
-        function(row, column, equation.function_y);
+        function(column, row, equation.function_y);
         function(row, column, equation.function_y, row_region + 1, col_region,
                 true);
         line++;
@@ -161,7 +160,7 @@ public class PolinomioBuilder {
                 col_region + 1, true);
         line++;
 
-        function(row, column, equation.function_xx);
+        function(column, row, equation.function_xx);
         function(row, column, equation.function_xx, row_region + 1, col_region,
                 true);
         line++;
@@ -171,7 +170,7 @@ public class PolinomioBuilder {
                 col_region + 1, true);
         line++;
 
-        function(row, column, equation.function_yy);
+        function(column, row, equation.function_yy);
         function(row, column, equation.function_yy, row_region + 1, col_region,
                 true);
         line++;
@@ -186,16 +185,17 @@ public class PolinomioBuilder {
     /**
      * Insere os valores de A*x*y na matriz
      */
-    protected void function(int intervalo_x, int intervalo_y, equation tipo) {
-        function(intervalo_x, intervalo_y, tipo, row_region, col_region,
+    protected void function(int intervalo_x, int intervalo_y,
+            equation tipo) {
+        //Todo: Invertido x e y
+        function(intervalo_y, intervalo_x, tipo, row_region, col_region,
                 false);
     }
 
     protected void function(int intervalo_x, int intervalo_y,
-            equation type,
-            int x_region, int y_region, boolean negative) {
+            equation type, int x_region, int y_region, boolean negative) {
 
-        int num_cols_regions = matriz.columns() - 1;
+        int num_cols_regions = matriz.rows() - 1;
 
         for (int i = 0; i <= 3; i++) {
             for (int j = 0; j <= 3; j++) {
@@ -204,10 +204,10 @@ public class PolinomioBuilder {
                              4 * i + j;
 
 //              intervalo_x,
-                double delta_x = intervalo_x,
+                double delta_x = intervalo_x;
 //                        (intervalo_x == x_region) ? 0 : intervalo_x - x_region,
 //              intervalo_y;
-                        delta_y = intervalo_y;
+                double delta_y = intervalo_y;
 //                                (intervalo_y == y_region) ? 0 :
 //                                intervalo_y - y_region;
 
