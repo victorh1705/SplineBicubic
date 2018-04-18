@@ -2,7 +2,9 @@ package Structure;
 
 import FileManager.FileManager;
 import org.la4j.LinearAlgebra;
+import org.la4j.Matrix;
 import org.la4j.Vector;
+import org.la4j.inversion.MatrixInverter;
 import org.la4j.matrix.sparse.CRSMatrix;
 import org.la4j.vector.dense.BasicVector;
 
@@ -35,13 +37,20 @@ public class PolinomioSolver extends PolinomioBuilder {
             }
         }
 
-        // create
-        //
-
+//        Pivoting.Parcial(sparce_matriz,value_b);
         FileManager.createFile("saida", sparce_matriz);
 
-        return sparce_matriz.withSolver(LinearAlgebra.SolverFactory.GAUSSIAN)
-                .solve(value_b);
+
+        LinearAlgebra.InverterFactory inverterFactory =  LinearAlgebra.GAUSS_JORDAN;
+        MatrixInverter inverter = sparce_matriz.withInverter(inverterFactory);
+
+        Matrix inverse = inverter.inverse();
+        inverse.multiply(value_b);
+
+//        return sparce_matriz.withSolver(LinearAlgebra.SolverFactory.GAUSSIAN)
+//                .solve(value_b);
+
+        return inverse.multiply(value_b);
 
     }
 }

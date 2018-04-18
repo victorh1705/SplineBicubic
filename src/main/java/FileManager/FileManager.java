@@ -51,6 +51,45 @@ public class FileManager {
         }
     }
 
+    public static void createData(String path, Matriz matriz, Vector vector,
+            double
+                    range) {
+
+        // 20 -> 21 -> 22 (indice)
+
+        int x_range = (int) ((matriz.rows() - 1) / range) + 2,
+                y_range = (int) ((matriz.columns() - 1) / range) + 2;
+
+        Matriz result = new Matriz(x_range, y_range);
+
+        for (int i = 1; i < result.rows(); i++) {
+            result.set(i, 0, range * (i - 1));
+            System.out.printf("range %f  - %f\n", range * (i - 1),
+                    result.get(i, 0));
+        }
+        for (int i = 1; i < result.columns(); i++) {
+            result.set(0, i, range * (i - 1));
+            System.out.printf("range %f  - %f\n", range * (i - 1),
+                    result.get(0, i));
+        }
+
+        for (int i = 1; i < result.rows(); i++) {
+            for (int j = 1; j < result.columns(); j++) {
+                double data = Matriz.valorZ2(matriz, vector, range * (i - 1),
+                        range * (j - 1));
+                result.set(i, j, data);
+            }
+        }
+
+        try (PrintStream out = new PrintStream(path + ".csv")) {
+            out.print(result.mkString(NumberFormat.getInstance
+                    (), "\n", ";"));
+            System.out.printf("\nArquivo %s criado", path);
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public String getPath() {
         return path;
     }

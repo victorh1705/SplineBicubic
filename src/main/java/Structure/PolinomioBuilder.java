@@ -3,11 +3,25 @@ package Structure;
 import org.la4j.Vector;
 import org.la4j.matrix.sparse.CRSMatrix;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static java.lang.Math.pow;
 
 @SuppressWarnings("Duplicates")
 public class PolinomioBuilder {
 
+    public static final equation FUNCTION = equation.function;
+    public static final List<equation> FIRST_DERIVATIVE = new ArrayList<equation>() {{
+        add(equation.function_x);
+        add(equation.function_y);
+    }};
+    public static final List<equation> SECOND_DERIVATIVE = new ArrayList<equation>
+            () {{
+        add(equation.function_xx);
+        add(equation.function_xy);
+        add(equation.function_yy);
+    }};
     protected Vector value_b; // vetor de value_b
     protected CRSMatrix sparce_matriz;
     protected int line;
@@ -249,9 +263,9 @@ public class PolinomioBuilder {
 
                 }
 
-                System.out.printf(
-                        "\ncolumn = %d  valor= %.0f row_region = %d col_region = %d ",
-                        column, matriz_value, x_region, y_region);
+//                System.out.printf(
+//                        "\ncolumn = %d  valor= %.0f row_region = %d col_region = %d ",
+//                        column, matriz_value, x_region, y_region);
                 if (negative) matriz_value *= -1;
                 sparce_matriz.set(line, column, matriz_value);
             }
@@ -267,36 +281,46 @@ public class PolinomioBuilder {
     private double CalculateValueB(boolean negative, equation type,
             int x, int y) {
         double retorno = 0;
-        if (type == equation.function) {
+
+
+        if (FUNCTION.equals(type)) {
             retorno = matriz.get(x, y);
+        } else if (SECOND_DERIVATIVE.contains(type)) {
+            return secondDerivative(negative, x, y, type);
         }
-//        else if (type == equation.function_xy) {
-//            if (null != matriz.getType_point(x, y)) {
-//                int x_big = (x < matriz.columns() - 1) ? x + 1 : x,
-//                        x_small = (x > 0) ? x - 1 : 0,
-//                        y_big = (y < matriz.columns() - 1) ? y + 1 : y,
-//                        y_small = (y > 0) ? y - 1 : 0;
-//
-//                retorno = matriz.get(x_big, y_big) + matriz.get(x_small,
-//                        y_small) - matriz.get(x_big, y_small) - matriz.get
-//                        (x_small, y_big);
-//                retorno = retorno / (pow(1, 2));
-//
-//                if (matriz.getType_point(x, y) ==
-//                    Matriz.typePoint.edge) {
-//                    retorno = retorno / 2;
-//                }
-//
-//            }
-//
-//            if (negative) {
-//                retorno *= -1;
-//            }
-//
-//            //add to the existing value
-//            retorno += value_b.get(line);
-//            return retorno;
-//        }
+        return retorno;
+    }
+
+    private double secondDerivative(boolean negative, int x, int y,
+            equation type) {
+        double retorno = 0;
+
+        if (type == equation.function_xy) {
+            if (null != matriz.getType_point(x, y)) {
+                int x_big = (x < matriz.columns() - 1) ? x + 1 : x,
+                        x_small = (x > 0) ? x - 1 : 0,
+                        y_big = (y < matriz.columns() - 1) ? y + 1 : y,
+                        y_small = (y > 0) ? y - 1 : 0;
+
+                retorno = matriz.get(x_big, y_big) + matriz.get(x_small,
+                        y_small) - matriz.get(x_big, y_small) - matriz.get
+                        (x_small, y_big);
+                retorno = retorno / (pow(1, 2));
+
+                if (matriz.getType_point(x, y) ==
+                    Matriz.typePoint.edge) {
+                    retorno = retorno / 2;
+                }
+
+            }
+
+            if (negative) {
+                retorno *= -1;
+            }
+
+            //add to the existing value
+            retorno += value_b.get(line);
+        }
         return retorno;
     }
 

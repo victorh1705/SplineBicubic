@@ -6,8 +6,10 @@
 package com.mycompany.splinecubic;
 
 import FileManager.FileManager;
+import Plotting.Surface;
 import Structure.Matriz;
 import Structure.PolinomioSolver;
+import org.jzy3d.analysis.AnalysisLauncher;
 import org.la4j.LinearAlgebra;
 import org.la4j.Matrix;
 import org.la4j.Vector;
@@ -22,13 +24,15 @@ import java.io.IOException;
  */
 public class NewMain {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
 
         criacaoMatriz();
 //        ma.createFile();
 //        CriaVetor cv = new CriaVetor();
 //        teste();
+
     }
+
 
     private static void teste() {
         Matrix a = new Basic2DMatrix(new double[][]{
@@ -59,37 +63,49 @@ public class NewMain {
         fm.createFile("saida", ps.getSparce_matriz());
         fm.createFile("resultado", ps.getValue_b());
         fm.createFile("polinomio", polinomio);
+        fm.createData("data", data_matriz, polinomio, 0.1);
 
+        plot(data_matriz, polinomio);
+
+//        printDados(data_matriz, polinomio);
+    }
+
+    private static void printDados(Matriz data_matriz, Vector polinomio) {
         System.out.print("\n " + data_matriz.toCSV() + "\n");
 
-//        for (int i = 0; i < 20; i++) {
-//            for (int j = 0; j < 20; j++) {
-//                valorZ(data_matriz,polinomio,i*0.1, j*0.1);
-//            }
-//        }
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 20; j++) {
+                Matriz.valorZ(data_matriz, polinomio, i * 0.1, j * 0.1);
+            }
+        }
 
-
-        Matriz.valorZ(data_matriz,polinomio,1, 0);
-        Matriz.valorZ(data_matriz,polinomio,2, 0);
-        Matriz.valorZ(data_matriz,polinomio,0, 1);
-        Matriz.valorZ(data_matriz,polinomio,0, 2);
+        Matriz.valorZ(data_matriz, polinomio, 1, 0);
+        Matriz.valorZ(data_matriz, polinomio, 2, 0);
+        Matriz.valorZ(data_matriz, polinomio, 0, 1);
+        Matriz.valorZ(data_matriz, polinomio, 0, 2);
         Matriz.valorZ(data_matriz, polinomio, 1, 1);
         Matriz.valorZ(data_matriz, polinomio, 2, 1);
         Matriz.valorZ(data_matriz, polinomio, 1, 2);
         Matriz.valorZ(data_matriz, polinomio, 2, 2);
 
         System.out.println();
-//        Matriz.valorZ2(data_matriz,polinomio,0.0, 0.0);
-        Matriz.valorZ2(data_matriz,polinomio,1, 0);
-        Matriz.valorZ2(data_matriz,polinomio,2, 0);
-        Matriz.valorZ2(data_matriz,polinomio,0, 1);
-        Matriz.valorZ2(data_matriz,polinomio,0, 2);
-        Matriz.valorZ2(data_matriz, polinomio, 1, 1);
-        Matriz.valorZ2(data_matriz, polinomio, 2, 1);
-        Matriz.valorZ2(data_matriz, polinomio, 1, 2);
+        Matriz.valorZ2(data_matriz, polinomio, 0.0, 0.0);
+        Matriz.valorZ2(data_matriz, polinomio, 1, 0.1);
+        Matriz.valorZ2(data_matriz, polinomio, 2, 0.1);
+        Matriz.valorZ2(data_matriz, polinomio, 0.1, 1);
+        Matriz.valorZ2(data_matriz, polinomio, 0.1, 2);
+        Matriz.valorZ2(data_matriz, polinomio, 1, 1.1);
+        Matriz.valorZ2(data_matriz, polinomio, 2, 1.1);
+        Matriz.valorZ2(data_matriz, polinomio, 1.1, 2);
         Matriz.valorZ2(data_matriz, polinomio, 2, 2);
-
-//        MatrizInArray ma = data_matriz.criaMatrizInterpolacao();
     }
 
+    private static void plot(Matriz data_matriz, Vector polinomio) {
+        Surface surface = new Surface(data_matriz, polinomio);
+        try {
+            AnalysisLauncher.open(surface);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.mycompany</groupId>
     <artifactId>SplineCubic</artifactId>
@@ -10,21 +12,48 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
-    
+
     <dependencies>
         <!--la4j - matriz-->
         <dependency>
             <groupId>org.la4j</groupId>
             <artifactId>la4j</artifactId>
-            <version>0.6.0</version>
+            <version>RELEASE</version>
         </dependency>
 
 
         <!--Jxls - API for excel-->
+        <!--<dependency>-->
+        <!--<groupId>org.jxls</groupId>-->
+        <!--<artifactId>jxls</artifactId>-->
+        <!--<version>RELEASE</version>-->
+        <!--</dependency>-->
+
+        <!--Plot-->
         <dependency>
-            <groupId>org.jxls</groupId>
-            <artifactId>jxls</artifactId>
+            <groupId>org.jzy3d</groupId>
+            <artifactId>jzy3d-api</artifactId>
             <version>RELEASE</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.jogamp.jogl</groupId>
+            <artifactId>jogl-all</artifactId>
+            <version>RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jogamp.gluegen</groupId>
+            <artifactId>gluegen-rt-main</artifactId>
+            <version>RELEASE</version>
+        </dependency>
+
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>jzy3d-releases</id>
+            <name>Jzy3d Releases</name>
+            <url>http://maven.jzy3d.org/releases</url>
+        </repository>
+    </repositories>
 </project>

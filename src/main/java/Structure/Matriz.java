@@ -59,9 +59,8 @@ public class Matriz extends Basic2DMatrix {
             }
         }
 
-        System.out.printf("\nValor(%.2f,%.2f) = %.2f  Regiao X=%d, Y=%d ", x,
-                y,
-                valor, x_index, y_index);
+        System.out.printf("\nValor(%.2f,%.2f) = %.4f  Regiao X=%d, Y=%d ", x,
+                y, valor, x_index, y_index);
         return valor;
     }
 
@@ -86,7 +85,7 @@ public class Matriz extends Basic2DMatrix {
             }
         }
 
-        System.out.printf("\nValor 2 (%.2f,%.2f) = %.2f  Regiao X=%d, Y=%d " +
+        System.out.printf("\nValor 2 (%.2f,%.2f) = %.4f  Regiao X=%d, Y=%d " +
                           "", x,
                 y,
                 valor, x_index, y_index);
