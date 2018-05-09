@@ -6,6 +6,8 @@
 package library;
 
 import fileManager.FileManager;
+import library.derivative.firstDerivative.FirstDerivative;
+import library.derivative.secondDerivative.SecondDerivative;
 import org.junit.*;
 import structure.Matriz;
 import type.equation;
@@ -25,6 +27,7 @@ public class DerivativeTest {
     private static Matriz df_xx;
     private static Matriz df_y;
     private static Matriz df_yy;
+    private static Matriz df_xy;
     private static Matriz matriz;
 
     public DerivativeTest() {
@@ -36,6 +39,7 @@ public class DerivativeTest {
         df_xx = new FileManager(path + "sd_xx").leituraArquivo();
         df_y = new FileManager(path + "pd_y").leituraArquivo();
         df_yy = new FileManager(path + "sd_yy").leituraArquivo();
+        df_xy = new FileManager(path + "sd_xy").leituraArquivo();
         matriz = new FileManager("teste").leituraArquivo();
     }
 
@@ -54,22 +58,22 @@ public class DerivativeTest {
     /**
      * Test of firstDerivative method, of class Derivative.
      */
-//    @Test
+    @Test
     public void function_x() {
         System.out.println("X - firstDerivative");
         equation type = equation.function_x;
         double expResult = 0.0;
 
-        Matriz pd = new Matriz(matriz.rows(), matriz.columns());
+        Matriz local_matriz = new Matriz(matriz.rows(), matriz.columns());
         for (int y = 0; y < matriz.columns(); y++) {
             for (int x = 0; x < matriz.rows(); x++) {
-                double result = Derivative.firstDerivative(false, x, y, type,
-                        matriz);
-                pd.setValue(x, y, result);
+                double result = new FirstDerivative(matriz).derivate(x,
+                        y, type);
+                local_matriz.setValue(x, y, result);
             }
         }
 
-        assertEqualsMatriz(df_x, pd, expResult);
+        assertEqualsMatriz(df_x, local_matriz, expResult);
     }
 
     /**
@@ -77,41 +81,41 @@ public class DerivativeTest {
      */
     @Test
     public void function_xx() {
-        System.out.println("X - 2ndDerivative");
+        System.out.println("XX - 2ndDerivative");
         equation type = equation.function_xx;
         double expResult = 0.0;
 
-        Matriz pd = new Matriz(matriz.rows(), matriz.columns());
+        Matriz local_matriz = new Matriz(matriz.rows(), matriz.columns());
         for (int y = 0; y < matriz.columns(); y++) {
             for (int x = 0; x < matriz.rows(); x++) {
-                double result = Derivative.secondDerivative(false, x, y, type,
-                        matriz);
-                pd.setValue(x, y, result);
+                double result = new SecondDerivative(matriz).derivate(
+                        x, y, type);
+                local_matriz.setValue(x, y, result);
             }
         }
 
-        assertEqualsMatriz(df_xx, pd, expResult);
+        assertEqualsMatriz(df_xx, local_matriz, expResult);
     }
 
     /**
      * Test of firstDerivative method, of class Derivative.
      */
-//    @Test
+    @Test
     public void function_y() {
         System.out.println("Y - firstDerivative");
         equation type = equation.function_y;
         double expResult = 0.0;
 
-        Matriz pd = new Matriz(matriz.rows(), matriz.columns());
+        Matriz local_matriz = new Matriz(matriz.rows(), matriz.columns());
         for (int y = 0; y < matriz.columns(); y++) {
             for (int x = 0; x < matriz.rows(); x++) {
-                double result = Derivative.firstDerivative(false, x, y, type,
-                        matriz);
-                pd.setValue(x, y, result);
+                double result = new FirstDerivative(matriz).derivate(
+                        x, y, type);
+                local_matriz.setValue(x, y, result);
             }
         }
 
-        assertEqualsMatriz(df_y, pd, expResult);
+        assertEqualsMatriz(df_y, local_matriz, expResult);
     }
 
 
@@ -120,20 +124,41 @@ public class DerivativeTest {
      */
     @Test
     public void function_yy() {
-        System.out.println("Y - 2nd Derivative");
+        System.out.println("YY - 2nd Derivative");
         equation type = equation.function_yy;
         double expResult = 0.0;
 
-        Matriz pd = new Matriz(matriz.rows(), matriz.columns());
+        Matriz local_matriz = new Matriz(matriz.rows(), matriz.columns());
         for (int y = 0; y < matriz.columns(); y++) {
             for (int x = 0; x < matriz.rows(); x++) {
-                double result = Derivative.secondDerivative(false, x, y, type,
-                        matriz);
-                pd.setValue(x, y, result);
+                double result = new SecondDerivative(matriz).derivate(x,
+                        y, type);
+                local_matriz.setValue(x, y, result);
             }
         }
 
-        assertEqualsMatriz(df_yy, pd, expResult);
+        assertEqualsMatriz(df_yy, local_matriz, expResult);
+    }
+
+    /**
+     * Test of secondDerivative method, of class Derivative.
+     */
+    @Test
+    public void function_xy() {
+        System.out.println("XY - 2nd Derivative");
+        equation type = equation.function_xy;
+        double expResult = 0.0;
+
+        Matriz local_matriz = new Matriz(matriz.rows(), matriz.columns());
+        for (int y = 0; y < matriz.columns(); y++) {
+            for (int x = 0; x < matriz.rows(); x++) {
+                double result = new SecondDerivative(matriz).derivate(x,
+                        y, type);
+                local_matriz.setValue(x, y, result);
+            }
+        }
+
+        assertEqualsMatriz(df_xy, local_matriz, expResult);
     }
 
 

@@ -1,7 +1,9 @@
 package structure;
 
+import library.derivative.firstDerivative.FirstDerivative;
 import org.la4j.Vector;
 import org.la4j.matrix.dense.Basic2DMatrix;
+import type.equation;
 
 import static java.lang.Math.pow;
 
@@ -130,6 +132,25 @@ public class Matriz extends Basic2DMatrix {
                 }
             }
         }
+    }
+
+    public double derivate(int x, int y, equation type) {
+        switch (type) {
+            case function_x:
+                return new FirstDerivative(this).derivate(x, y,
+                        type);
+            case function_y:
+                return new FirstDerivative(this).derivate(x, y,
+                        type);
+            case function_xy:
+                break;
+            case function_xx:
+                break;
+            case function_yy:
+                break;
+        }
+        fail("Illegal Equation type:" + type);
+        return 0;
     }
 
     @Override
