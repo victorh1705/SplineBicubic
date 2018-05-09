@@ -1,4 +1,4 @@
-package Structure;
+package structure;
 
 import org.la4j.vector.dense.BasicVector;
 

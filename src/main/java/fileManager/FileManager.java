@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package FileManager;
+package fileManager;
 
-import Structure.Matriz;
 import org.la4j.Matrix;
 import org.la4j.Vector;
+import structure.Matriz;
 
 import java.io.*;
 import java.text.NumberFormat;
@@ -16,10 +16,9 @@ import java.util.Locale;
 /**
  * @author voitt
  */
-@SuppressWarnings("Duplicates")
 public class FileManager {
 
-    private String path;
+    private String type;
     private int numLinha;
     private int numColuna;
 
@@ -27,35 +26,31 @@ public class FileManager {
     private InputStreamReader isr;
 
     public FileManager(String name) {
-        this.path = name + ".txt";
+        type = name + ".txt";
         numColuna = 0;
         numLinha = 0;
     }
 
-    public static void createFile(String path, Vector vector) {
-        try (PrintStream out = new PrintStream(path + ".csv")) {
-            out.print(vector.toCSV(NumberFormat.getInstance
-                    (Locale.US)));
-            System.out.printf("\nArquivo %s criado", path);
+    public static void createFile(String nameFile, Vector vector) {
+        try (PrintStream out = new PrintStream(nameFile + ".csv")) {
+            out.print(vector.toCSV(NumberFormat.getInstance(Locale.US)));
+            System.out.printf("\nArquivo %s criado", nameFile);
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         }
     }
 
-    public static void createFile(String path, Matrix matrix) {
-        try (PrintStream out = new PrintStream(path + ".csv")) {
+    public static void createFile(String nameFile, Matrix matrix) {
+        try (PrintStream out = new PrintStream(nameFile + ".csv")) {
             out.print(matrix.toCSV(NumberFormat.getInstance()));
-            System.out.printf("\nArquivo %s criado", path);
+            System.out.printf("\nArquivo %s criado", nameFile);
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         }
     }
 
-    public static void createData(String path, Matriz matriz, Vector vector,
-            double
-                    range) {
-
-        // 20 -> 21 -> 22 (indice)
+    public static void createData(String nameFile, Matriz matriz, Vector vector,
+            double range) {
 
         int x_range = (int) ((matriz.rows() - 1) / range) + 2,
                 y_range = (int) ((matriz.columns() - 1) / range) + 2;
@@ -81,21 +76,20 @@ public class FileManager {
             }
         }
 
-        try (PrintStream out = new PrintStream(path + ".csv")) {
-            out.print(result.mkString(NumberFormat.getInstance
-                    (), "\n", ";"));
-            System.out.printf("\nArquivo %s criado", path);
+        try (PrintStream out = new PrintStream(nameFile + ".csv")) {
+            out.print(result.mkString(NumberFormat.getInstance(), "\n", ";"));
+            System.out.printf("\nArquivo %s criado", nameFile);
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         }
     }
 
-    public String getPath() {
-        return path;
+    public String getType() {
+        return type;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public Matriz leituraArquivo() throws IOException {
@@ -104,34 +98,36 @@ public class FileManager {
     }
 
     private void leituraInicial() throws IOException {
+        String print = "\n";
         try {
-            is = new FileInputStream(path);
+            is = new FileInputStream(type);
             isr = new InputStreamReader(is);
             try (BufferedReader reader = new BufferedReader(isr)) {
                 String linha = reader.readLine();
 
                 while (linha != null) {
-                    System.out.println(linha);
+                    print += linha + "\n";
                     linha = reader.readLine();
                     numLinha++;
                     if (linha != null) {
-                        numColuna = linha.split(" ").length;
+                        numColuna = linha.split("\\s").length;
                     }
                 }
             }
 
-            System.out.println("numColuna = " + numColuna);
-            System.out.println("numLinha = " + numLinha);
+            print += "numColuna = " + numColuna;
+            print += "\nnumLinha = " + numLinha;
         } catch (IOException e) {
-            System.out.println("Erro ao tentar ler o arquivo " + e);
+            print += "\nErro ao tentar ler o arquivo " + e;
         } finally {
             close();
+            System.out.println(print);
         }
     }
 
     private Matriz leituraDados() throws IOException {
         try {
-            is = new FileInputStream(path);
+            is = new FileInputStream(type);
             isr = new InputStreamReader(is);
             try (BufferedReader reader = new BufferedReader(isr)) {
 
@@ -142,15 +138,12 @@ public class FileManager {
                 int indiceLinha = 0;
 
                 while (linha != null) {
-                    coluna = linha.split(" ");
+                    coluna = linha.split("\\s");
 
                     int indiceColuna = 0;
 
                     for (String col : coluna) {
                         int indice = numColuna * indiceLinha + indiceColuna;
-
-                        System.out.printf("\nIndice coluna: %d valor %s",
-                                indice, col);
 
                         matriz.set(indiceLinha, indiceColuna,
                                 Double.valueOf(col));
@@ -164,7 +157,7 @@ public class FileManager {
                 return matriz;
             }
         } catch (IOException e) {
-            System.out.println("Erro ao tentar ler o arquivo " + e);
+            System.out.println("\nErro ao tentar ler o arquivo " + e);
         } finally {
             close();
         }

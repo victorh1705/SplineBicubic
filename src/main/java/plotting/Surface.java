@@ -1,6 +1,5 @@
-package Plotting;
+package plotting;
 
-import Structure.Matriz;
 import org.jzy3d.analysis.AbstractAnalysis;
 import org.jzy3d.chart.factories.AWTChartComponentFactory;
 import org.jzy3d.colors.Color;
@@ -13,6 +12,7 @@ import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.la4j.Vector;
+import structure.Matriz;
 
 public class Surface extends AbstractAnalysis {
 

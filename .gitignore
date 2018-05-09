@@ -9,3 +9,4 @@ depedency/
 nbactions.xml
 *.xlsx
 *.xlsm
+/nbproject/

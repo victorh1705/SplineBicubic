@@ -1,14 +1,14 @@
-package Structure;
+package structure;
 
 import org.la4j.Vector;
 import org.la4j.matrix.sparse.CRSMatrix;
+import type.equation;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.pow;
 
-@SuppressWarnings("Duplicates")
 public class PolinomioBuilder {
 
     public static final equation FUNCTION = equation.function;
@@ -284,54 +284,13 @@ public class PolinomioBuilder {
 
 
         if (FUNCTION.equals(type)) {
-            retorno = matriz.get(x, y);
+            return matriz.get(x, y);
+        } else if (FIRST_DERIVATIVE.contains(type)) {
+            //return Derivative.firstDerivative(negative, x, y, type,matriz);
         } else if (SECOND_DERIVATIVE.contains(type)) {
-            return secondDerivative(negative, x, y, type);
+            // return Derivative.secondDerivative(negative, x, y, type,matriz);
         }
         return retorno;
-    }
-
-    private double secondDerivative(boolean negative, int x, int y,
-            equation type) {
-        double retorno = 0;
-
-        if (type == equation.function_xy) {
-            if (null != matriz.getType_point(x, y)) {
-                int x_big = (x < matriz.columns() - 1) ? x + 1 : x,
-                        x_small = (x > 0) ? x - 1 : 0,
-                        y_big = (y < matriz.columns() - 1) ? y + 1 : y,
-                        y_small = (y > 0) ? y - 1 : 0;
-
-                retorno = matriz.get(x_big, y_big) + matriz.get(x_small,
-                        y_small) - matriz.get(x_big, y_small) - matriz.get
-                        (x_small, y_big);
-                retorno = retorno / (pow(1, 2));
-
-                if (matriz.getType_point(x, y) ==
-                    Matriz.typePoint.edge) {
-                    retorno = retorno / 2;
-                }
-
-            }
-
-            if (negative) {
-                retorno *= -1;
-            }
-
-            //add to the existing value
-            retorno += value_b.get(line);
-        }
-        return retorno;
-    }
-
-
-    protected enum equation {
-        function,
-        function_x,
-        function_y,
-        function_xy,
-        function_xx,
-        function_yy
     }
 
 }

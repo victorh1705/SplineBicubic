@@ -1,4 +1,4 @@
-package Library;
+package library;
 
 import org.la4j.Vector;
 import org.la4j.matrix.SparseMatrix;

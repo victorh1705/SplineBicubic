@@ -1,4 +1,4 @@
-package Structure;
+package structure;
 
 import org.la4j.Vector;
 import org.la4j.matrix.dense.Basic2DMatrix;
@@ -34,6 +34,14 @@ public class Matriz extends Basic2DMatrix {
 
         type_point = new typePoint[x.length][y.length];
         buildTypePoint(x.length, y.length);
+    }
+
+    public double getValue(int x, int y) {
+        return super.get(y, x);
+    }
+
+    public void setValue(int x, int y, double value) {
+        super.set(y, x, value);
     }
 
     public static double valorZ(Matriz matriz, Vector polinomio, double x,
@@ -90,6 +98,14 @@ public class Matriz extends Basic2DMatrix {
                 y,
                 valor, x_index, y_index);
         return valor;
+    }
+
+    public double get_x(int index) {
+        return value_x[index];
+    }
+
+    public double get_y(int index) {
+        return value_y[index];
     }
 
     public typePoint getType_point(int x, int y) {

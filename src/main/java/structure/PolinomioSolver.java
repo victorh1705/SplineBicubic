@@ -1,6 +1,6 @@
-package Structure;
+package structure;
 
-import FileManager.FileManager;
+import fileManager.FileManager;
 import org.la4j.LinearAlgebra;
 import org.la4j.Matrix;
 import org.la4j.Vector;

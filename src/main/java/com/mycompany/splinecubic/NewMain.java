@@ -5,10 +5,7 @@
  */
 package com.mycompany.splinecubic;
 
-import FileManager.FileManager;
-import Plotting.Surface;
-import Structure.Matriz;
-import Structure.PolinomioSolver;
+import fileManager.FileManager;
 import org.jzy3d.analysis.AnalysisLauncher;
 import org.la4j.LinearAlgebra;
 import org.la4j.Matrix;
@@ -16,6 +13,9 @@ import org.la4j.Vector;
 import org.la4j.linear.LinearSystemSolver;
 import org.la4j.matrix.dense.Basic2DMatrix;
 import org.la4j.vector.dense.BasicVector;
+import plotting.Surface;
+import structure.Matriz;
+import structure.PolinomioSolver;
 
 import java.io.IOException;
 
@@ -64,6 +64,7 @@ public class NewMain {
         fm.createFile("resultado", ps.getValue_b());
         fm.createFile("polinomio", polinomio);
         fm.createData("data", data_matriz, polinomio, 0.1);
+
 
         plot(data_matriz, polinomio);
 
