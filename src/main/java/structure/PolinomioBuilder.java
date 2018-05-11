@@ -214,7 +214,8 @@ public class PolinomioBuilder {
         for (int i = 0; i <= 3; i++) {
             for (int j = 0; j <= 3; j++) {
                 double matriz_value = 0;
-                int column = 16 * (num_cols_regions * x_region + y_region) +
+                int column = 16 *
+                             (num_cols_regions * x_region + y_region) +
                              4 * i + j;
 
 //              intervalo_x,

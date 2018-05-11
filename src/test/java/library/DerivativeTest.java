@@ -35,11 +35,11 @@ public class DerivativeTest {
 
     @BeforeClass
     public static void setUpClass() throws IOException {
-        df_x = new FileManager(path + "pd_x").leituraArquivo();
-        df_xx = new FileManager(path + "sd_xx").leituraArquivo();
-        df_y = new FileManager(path + "pd_y").leituraArquivo();
-        df_yy = new FileManager(path + "sd_yy").leituraArquivo();
-        df_xy = new FileManager(path + "sd_xy").leituraArquivo();
+        df_x = new FileManager(path + "derivadas/pd_x").leituraArquivo();
+        df_xx = new FileManager(path + "derivadas/sd_xx").leituraArquivo();
+        df_y = new FileManager(path + "derivadas/pd_y").leituraArquivo();
+        df_yy = new FileManager(path + "derivadas/sd_yy").leituraArquivo();
+        df_xy = new FileManager(path + "derivadas/sd_xy").leituraArquivo();
         matriz = new FileManager("teste").leituraArquivo();
     }
 

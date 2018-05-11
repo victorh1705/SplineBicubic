@@ -38,14 +38,6 @@ public class Matriz extends Basic2DMatrix {
         buildTypePoint(x.length, y.length);
     }
 
-    public double getValue(int x, int y) {
-        return super.get(y, x);
-    }
-
-    public void setValue(int x, int y, double value) {
-        super.set(y, x, value);
-    }
-
     public static double valorZ(Matriz matriz, Vector polinomio, double x,
             double y) {
         double valor = 0;
@@ -102,18 +94,66 @@ public class Matriz extends Basic2DMatrix {
         return valor;
     }
 
+    /**
+     * Equivalent to get(row,line) or super.get(line,row)
+     *
+     * @param x row
+     * @param y line
+     * @return super.get(y, x)
+     */
+    public double getValue(int x, int y) {
+        return super.get(y, x);
+    }
+
+    /**
+     * Equivalent to set(row,line) or super.set(line,row)
+     *
+     * @param x     row
+     * @param y     line
+     * @param value
+     */
+    public void setValue(int x, int y, double value) {
+        super.set(y, x, value);
+    }
+
+    /**
+     * Get the value related to the <b><i>x</i></b> axis
+     *
+     * @param index
+     * @return
+     */
     public double get_x(int index) {
         return value_x[index];
     }
 
+    /**
+     * Get the value related to the <b><i>y</i></b> axis
+     *
+     * @param index
+     * @return
+     */
     public double get_y(int index) {
         return value_y[index];
     }
 
+
+    /**
+     * Get the type(typePoint) of a point's matrix
+     *
+     * @param x
+     * @param y
+     * @return
+     */
     public typePoint getType_point(int x, int y) {
         return type_point[x][y];
     }
 
+    /**
+     * Set the tyoe(typePoint) of every point's matrix
+     *
+     * @param x
+     * @param y
+     */
     private void buildTypePoint(int x, int y) {
         type_point = new typePoint[x][y];
         for (int row = 0; row < rows(); row++) {
@@ -134,6 +174,14 @@ public class Matriz extends Basic2DMatrix {
         }
     }
 
+    /**
+     * Calculate a derivate of a point
+     *
+     * @param x
+     * @param y
+     * @param type type of derivate
+     * @return
+     */
     public double derivate(int x, int y, equation type) {
         switch (type) {
             case function_x:
@@ -153,6 +201,12 @@ public class Matriz extends Basic2DMatrix {
         return 0;
     }
 
+    /**
+     * Ensure if the matriz has the minimum valid values
+     *
+     * @param rows
+     * @param columns
+     */
     @Override
     protected void ensureDimensionsAreCorrect(int rows, int columns) {
         super.ensureDimensionsAreCorrect(rows, columns);
@@ -162,7 +216,10 @@ public class Matriz extends Basic2DMatrix {
 
     }
 
-
+    /**
+     * It defines if the point is a <i>vertex</i> || <i> edge</i> ||
+     * <i>intern</i>
+     */
     public enum typePoint {
         vertex,
         edge,
