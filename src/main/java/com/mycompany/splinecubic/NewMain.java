@@ -5,18 +5,15 @@
  */
 package com.mycompany.splinecubic;
 
+import fileManager.ExcelCreator;
 import fileManager.FileManager;
 import org.jzy3d.analysis.AnalysisLauncher;
-import org.la4j.LinearAlgebra;
-import org.la4j.Matrix;
 import org.la4j.Vector;
-import org.la4j.linear.LinearSystemSolver;
-import org.la4j.matrix.dense.Basic2DMatrix;
-import org.la4j.vector.dense.BasicVector;
 import plotting.Surface;
 import structure.Matriz;
 import structure.PolinomioSolver;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -26,28 +23,27 @@ public class NewMain {
 
     public static void main(String[] args) throws Exception {
 
-        criacaoMatriz();
+//        criacaoMatriz();
 //        ma.createFile();
 //        CriaVetor cv = new CriaVetor();
-//        teste();
+        excelCreator();
+
 
     }
 
+    private static void excelCreator() {
+        try {
+            ExcelCreator ec = new ExcelCreator("novo");
 
-    private static void teste() {
-        Matrix a = new Basic2DMatrix(new double[][]{
-                {1.0, 0.0, 0.0},
-                {0.0, 1.0, 0.0},
-                {0.0, 0.0, 1.0}
-        });
-
-        Vector resultados = new BasicVector(new double[]{2.0, 3.0, 4.0});
-        LinearSystemSolver solver = a.withSolver(
-                LinearAlgebra.SolverFactory.JACOBI);
-        Vector polinomio = solver.solve(resultados);
-
-        System.out.println("Polinomio: ");
-        System.out.println(polinomio.toCSV());
+            ec.createSheet("planilha1");
+            ec.setValue(0, 0, "Linha 1");
+            ec.setValue(1, 0, "Linha 2");
+            ec.setValue(2, 0, "Linha 3");
+            //TODO: (valorReferencia - valorSaida)/valorSaida
+            ec.writeFile();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void criacaoMatriz() throws IOException {

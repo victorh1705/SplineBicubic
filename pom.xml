@@ -38,6 +38,14 @@
             <artifactId>gluegen-rt-main</artifactId>
             <version>RELEASE</version>
         </dependency>
+
+        <!--Excel library-->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.17</version>
+        </dependency>
+        <!--Test library-->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>

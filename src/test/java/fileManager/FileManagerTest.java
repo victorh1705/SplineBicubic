@@ -17,7 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author victor
@@ -99,58 +99,6 @@ public class FileManagerTest {
 
         }
         assertTrue(find);
-    }
-
-    /**
-     * Test of createData method, of class fileManager.
-     */
-    public void testCreateData() {
-        System.out.println("createData");
-        String nameFile = "";
-        Matriz matriz = null;
-        Vector vector = null;
-        double range = 0.0;
-        FileManager.createData(path + nameFile, matriz, vector, range);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getType method, of class fileManager.
-     */
-    public void testGetType() {
-        System.out.println("getType");
-        FileManager instance = null;
-        String expResult = "";
-        String result = instance.getType();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of setType method, of class fileManager.
-     */
-    public void testSetType() {
-        System.out.println("setType");
-        String type = "";
-        FileManager instance = null;
-        instance.setType(type);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of leituraArquivo method, of class fileManager.
-     */
-    public void testLeituraArquivo() throws Exception {
-        System.out.println("leituraArquivo");
-        FileManager instance = null;
-        Matriz expResult = null;
-        Matriz result = instance.leituraArquivo();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     private File[] fileList() {
