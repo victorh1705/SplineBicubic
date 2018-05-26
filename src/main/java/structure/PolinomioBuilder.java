@@ -11,16 +11,16 @@ import static java.lang.Math.pow;
 
 public class PolinomioBuilder {
 
-    public static final equation FUNCTION = equation.function;
+    public static final equation FUNCTION = equation.FUNCTION;
     public static final List<equation> FIRST_DERIVATIVE = new ArrayList<equation>() {{
-        add(equation.function_x);
-        add(equation.function_y);
+        add(equation.FUNCTION_X);
+        add(equation.FUNCTION_Y);
     }};
     public static final List<equation> SECOND_DERIVATIVE = new ArrayList<equation>
             () {{
-        add(equation.function_xx);
-        add(equation.function_xy);
-        add(equation.function_yy);
+        add(equation.FUNCTION_XX);
+        add(equation.FUNCTION_XY);
+        add(equation.FUNCTION_YY);
     }};
     protected Vector value_b; // vetor de value_b
     protected CRSMatrix sparce_matriz;
@@ -44,8 +44,8 @@ public class PolinomioBuilder {
     /**
      * Define the caracteristics of the point for a futher use of it
      *
-     * @param column column's index
-     * @param row    row's index
+     * @param column VERTICAL's index
+     * @param row    HORIZONTAL's index
      */
     public void interval(int column, int row) {
 
@@ -71,62 +71,62 @@ public class PolinomioBuilder {
     }
 
     protected void vertex(int column, int row) {
-        function(column, row, equation.function);
+        function(column, row, equation.FUNCTION);
         line++;
-        function(column, row, equation.function_xx);
+        function(column, row, equation.FUNCTION_XX);
         line++;
-        function(column, row, equation.function_yy);
+        function(column, row, equation.FUNCTION_YY);
         line++;
-        function(column, row, equation.function_xy);
+        function(column, row, equation.FUNCTION_XY);
         line++;
     }
 
     protected void edge(int column, int row) {
-        function(column, row, equation.function);
+        function(column, row, equation.FUNCTION);
         line++;
-        function(column, row, equation.function_xy);
+        function(column, row, equation.FUNCTION_XY);
         line++;
         if (row == 0 || row == matriz.rows() - 1) { //X axis
-            function(row, column, equation.function, row_region, col_region + 1,
+            function(row, column, equation.FUNCTION, row_region, col_region + 1,
                     false);
             line++;
             //paralela
-            function(column, row, equation.function_y);
-            function(row, column, equation.function_y, row_region,
+            function(column, row, equation.FUNCTION_Y);
+            function(row, column, equation.FUNCTION_Y, row_region,
                     col_region + 1, true);
             line++;
-            function(column, row, equation.function_yy);
-            function(row, column, equation.function_yy, row_region,
+            function(column, row, equation.FUNCTION_YY);
+            function(row, column, equation.FUNCTION_YY, row_region,
                     col_region + 1, true);
             line++;
             //perpendicular
-            function(column, row, equation.function_x);
+            function(column, row, equation.FUNCTION_X);
             line++;
-            function(row, column, equation.function_xx, row_region,
+            function(row, column, equation.FUNCTION_XX, row_region,
                     col_region + 1, false);
             line++;
-            function(row, column, equation.function_xy, row_region,
+            function(row, column, equation.FUNCTION_XY, row_region,
                     col_region + 1, false);
         } else { //Y axis
-            function(row, column, equation.function, row_region + 1, col_region,
+            function(row, column, equation.FUNCTION, row_region + 1, col_region,
                     false);
             line++;
             //paralela
-            function(column, row, equation.function_x);
-            function(row, column, equation.function_x, row_region + 1,
+            function(column, row, equation.FUNCTION_X);
+            function(row, column, equation.FUNCTION_X, row_region + 1,
                     col_region, true);
             line++;
-            function(column, row, equation.function_xx);
-            function(row, column, equation.function_xx, row_region + 1,
+            function(column, row, equation.FUNCTION_XX);
+            function(row, column, equation.FUNCTION_XX, row_region + 1,
                     col_region, true);
             line++;
             //perpendicular
-            function(column, row, equation.function_y);
+            function(column, row, equation.FUNCTION_Y);
             line++;
-            function(row, column, equation.function_yy, row_region + 1,
+            function(row, column, equation.FUNCTION_YY, row_region + 1,
                     col_region, false);
             line++;
-            function(row, column, equation.function_xy, row_region + 1,
+            function(row, column, equation.FUNCTION_XY, row_region + 1,
                     col_region, false);
 
         }
@@ -135,62 +135,62 @@ public class PolinomioBuilder {
 
     protected void intern(int column, int row) {
 
-        function(column, row, equation.function);
+        function(column, row, equation.FUNCTION);
         line++;
-        function(column, row, equation.function_xy);
+        function(column, row, equation.FUNCTION_XY);
         line++;
 
         for (int i = 0; i <= 1; i++) {
             for (int j = 0; j <= 1; j++) {
                 if (i != 0 || j != 0) {
-                    function(row, column, equation.function, row_region + i,
+                    function(row, column, equation.FUNCTION, row_region + i,
                             col_region + j, false);
                     line++;
 
-                    function(row, column, equation.function_xy, row_region + i,
+                    function(row, column, equation.FUNCTION_XY, row_region + i,
                             col_region + j, false);
                     line++;
                 }
             }
         }
 
-        function(column, row, equation.function_x);
-        function(row, column, equation.function_x, row_region + 1, col_region,
+        function(column, row, equation.FUNCTION_X);
+        function(row, column, equation.FUNCTION_X, row_region + 1, col_region,
                 true);
         line++;
-        function(row, column, equation.function_x, row_region, col_region + 1,
+        function(row, column, equation.FUNCTION_X, row_region, col_region + 1,
                 false);
-        function(row, column, equation.function_x, row_region + 1,
+        function(row, column, equation.FUNCTION_X, row_region + 1,
                 col_region + 1, true);
         line++;
 
-        function(column, row, equation.function_y);
-        function(row, column, equation.function_y, row_region + 1, col_region,
+        function(column, row, equation.FUNCTION_Y);
+        function(row, column, equation.FUNCTION_Y, row_region + 1, col_region,
                 true);
         line++;
-        function(row, column, equation.function_y, row_region, col_region + 1,
+        function(row, column, equation.FUNCTION_Y, row_region, col_region + 1,
                 false);
-        function(row, column, equation.function_y, row_region + 1,
+        function(row, column, equation.FUNCTION_Y, row_region + 1,
                 col_region + 1, true);
         line++;
 
-        function(column, row, equation.function_xx);
-        function(row, column, equation.function_xx, row_region + 1, col_region,
+        function(column, row, equation.FUNCTION_XX);
+        function(row, column, equation.FUNCTION_XX, row_region + 1, col_region,
                 true);
         line++;
-        function(row, column, equation.function_xx, row_region, col_region + 1,
+        function(row, column, equation.FUNCTION_XX, row_region, col_region + 1,
                 false);
-        function(row, column, equation.function_xx, row_region + 1,
+        function(row, column, equation.FUNCTION_XX, row_region + 1,
                 col_region + 1, true);
         line++;
 
-        function(column, row, equation.function_yy);
-        function(row, column, equation.function_yy, row_region + 1, col_region,
+        function(column, row, equation.FUNCTION_YY);
+        function(row, column, equation.FUNCTION_YY, row_region + 1, col_region,
                 true);
         line++;
-        function(row, column, equation.function_yy, row_region, col_region + 1,
+        function(row, column, equation.FUNCTION_YY, row_region, col_region + 1,
                 false);
-        function(row, column, equation.function_yy, row_region + 1,
+        function(row, column, equation.FUNCTION_YY, row_region + 1,
                 col_region + 1, true);
         line++;
 
@@ -228,34 +228,34 @@ public class PolinomioBuilder {
 
                 //noinspection Duplicates
                 switch (type) {
-                    case function:
+                    case FUNCTION:
                         matriz_value = pow(delta_x, i) * pow(delta_y, j);
                         break;
-                    case function_x:
+                    case FUNCTION_X:
                         if (i > 0) {
                             matriz_value =
                                     i * pow(delta_x, i - 1) * pow(delta_y, j);
                         }
                         break;
-                    case function_y:
+                    case FUNCTION_Y:
                         if (j > 0) {
                             matriz_value =
                                     j * pow(delta_x, i) * pow(delta_y, j - 1);
                         }
                         break;
-                    case function_xy:
+                    case FUNCTION_XY:
                         if (i > 0 && j > 0) {
                             matriz_value = i * j * pow(delta_x, i - 1) *
                                            pow(delta_y, j - 1);
                         }
                         break;
-                    case function_xx:
+                    case FUNCTION_XX:
                         if (i > 1) {
                             matriz_value = i * (i - 1) * pow(delta_x, i - 2) *
                                            pow(delta_y, j);
                         }
                         break;
-                    case function_yy:
+                    case FUNCTION_YY:
                         if (j > 1) {
                             matriz_value = j * (j - 1) * pow(delta_x, i) *
                                            pow(delta_y, j - 2);
@@ -266,7 +266,7 @@ public class PolinomioBuilder {
 
 //                System.out.printf(
 //                        "\ncolumn = %d  valor= %.0f row_region = %d col_region = %d ",
-//                        column, matriz_value, x_region, y_region);
+//                        VERTICAL, matriz_value, x_region, y_region);
                 if (negative) matriz_value *= -1;
                 sparce_matriz.set(line, column, matriz_value);
             }

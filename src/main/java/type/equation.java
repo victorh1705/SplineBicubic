@@ -3,15 +3,15 @@ package type;
 /**
  * Enumeration to help define which value to calculate
  * <p>
- * <b>1st Derivative</b> - function_x || function_yy
+ * <b>1st Derivative</b> - FUNCTION_X || FUNCTION_YY
  * <p>
- * <b>2nd Derivative</b> - function_xx || function_yy || function_xy
+ * <b>2nd Derivative</b> - FUNCTION_XX || FUNCTION_YY || FUNCTION_XY
  */
 public enum equation {
-    function,
-    function_x,
-    function_y,
-    function_xy,
-    function_xx,
-    function_yy
+    FUNCTION,
+    FUNCTION_X,
+    FUNCTION_Y,
+    FUNCTION_XY,
+    FUNCTION_XX,
+    FUNCTION_YY
 }

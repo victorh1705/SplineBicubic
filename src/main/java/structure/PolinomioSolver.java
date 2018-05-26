@@ -15,7 +15,7 @@ public class PolinomioSolver extends PolinomioBuilder {
     }
 
     /**
-     * This function builds a Sparse matrix based on the initial matrix. Then
+     * This FUNCTION builds a Sparse matrix based on the initial matrix. Then
      * make the pivoting, if necessary, and finally solve the solution with the
      * 'value_b'(vector with the results of the matrix)
      * <p>
@@ -41,16 +41,20 @@ public class PolinomioSolver extends PolinomioBuilder {
         FileManager.createFile("saida", sparce_matriz);
 
 
+        return inverseAndMultiply();
+//        return sparce_matriz.withSolver(LinearAlgebra.SolverFactory.GAUSSIAN)
+//                .solve(value_b);
+
+
+    }
+
+    private Vector inverseAndMultiply() {
         LinearAlgebra.InverterFactory inverterFactory =  LinearAlgebra.GAUSS_JORDAN;
         MatrixInverter inverter = sparce_matriz.withInverter(inverterFactory);
 
         Matrix inverse = inverter.inverse();
         inverse.multiply(value_b);
 
-//        return sparce_matriz.withSolver(LinearAlgebra.SolverFactory.GAUSSIAN)
-//                .solve(value_b);
-
         return inverse.multiply(value_b);
-
     }
 }

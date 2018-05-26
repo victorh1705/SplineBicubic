@@ -9,11 +9,11 @@ import fileManager.ExcelCreator;
 import fileManager.FileManager;
 import org.jzy3d.analysis.AnalysisLauncher;
 import org.la4j.Vector;
+import org.la4j.vector.dense.BasicVector;
 import plotting.Surface;
 import structure.Matriz;
 import structure.PolinomioSolver;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -32,21 +32,40 @@ public class NewMain {
     }
 
     private static void excelCreator() {
-        try {
-            ExcelCreator ec = new ExcelCreator("novo");
+        try (ExcelCreator ec = new ExcelCreator("novo")) {
+            Vector aux = new BasicVector(21);
+            for (int i = 0; i <= 20; i++) {
+                aux.set(i, i * 0.1);
+            }
+            Vector polinomio = criacaoMatriz();
+
+            Matriz matriz = new Matriz(21, 21);
+            for (int i = 0; i <= 20; i++) {
+                for (int j = 0; j <= 20; j++) {
+                    double valor = Matriz.valorZ2(polinomio,
+                            aux.get(i), aux.get(j));
+                    matriz.setValue(i, j, valor);
+                }
+            }
+
 
             ec.createSheet("planilha1");
-            ec.setValue(0, 0, "Linha 1");
-            ec.setValue(1, 0, "Linha 2");
-            ec.setValue(2, 0, "Linha 3");
+
+            ec.setVector(aux, 1, ExcelCreator.Direction.VERTICAL);
+            ec.setVector(aux, 1, ExcelCreator.Direction.HORIZONTAL);
+            ec.setMatriz(matriz, 1, 1);
+
+//            ec.setValue(0, 0, "Linha 1");
+//            ec.setValue(1, 0, "Linha 2");
+//            ec.setValue(2, 0, "Linha 3");
             //TODO: (valorReferencia - valorSaida)/valorSaida
             ec.writeFile();
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private static void criacaoMatriz() throws IOException {
+    private static Vector criacaoMatriz() throws IOException {
         FileManager fm = new FileManager("teste");
 
         Matriz data_matriz = fm.leituraArquivo();
@@ -62,9 +81,10 @@ public class NewMain {
         fm.createData("data", data_matriz, polinomio, 0.1);
 
 
-        plot(data_matriz, polinomio);
+//        plot(data_matriz, polinomio);
 
 //        printDados(data_matriz, polinomio);
+        return polinomio;
     }
 
     private static void printDados(Matriz data_matriz, Vector polinomio) {

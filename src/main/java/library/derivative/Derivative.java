@@ -21,12 +21,12 @@ public abstract class Derivative {
      *
      * @param x
      * @param y
-     * @param type type of function that will be returned, can be normal value
+     * @param type type of FUNCTION that will be returned, can be normal value
      *             or can be a derivative
      * @param diff (UPPER || DOWN). types of difference. those difference has
      *             the value of the axis as reference.
      *             <p>
-     *             e.g.:: x = 1, y = 0, type = function_x, diff = UPPER diff =
+     *             e.g.:: x = 1, y = 0, type = FUNCTION_X, diff = UPPER diff =
      *             get(<b>x + 1</b>, y) - get(<b>x</b>, y)
      * @return
      */
@@ -36,22 +36,23 @@ public abstract class Derivative {
 
     /**
      * Initialize class variables to be used in others method. It depends of
-     * <b>type</b> <i>e.g.:</i> type = function_x || function_xx diff = x
+     * <b>type</b> <i>e.g.:</i> type = FUNCTION_X || FUNCTION_XX diff = x
      *
      * @param x
      * @param y
-     * @param type type of function that will be returned, can be normal value
+     * @param type type of FUNCTION that will be returned, can be normal value
      *             or can be a derivative
      */
     protected void initVariables(int x, int y, equation type) {
 
-        if (type == equation.function_x ||
-            type == equation.function_xx) {
+        if (type == equation.FUNCTION_X ||
+            type == equation.FUNCTION_XX) {
             diff_initial = (x == 0) ? 0 : x - 1;
             diff_middle = x;
             diff_final = (x == matriz.columns() - 1) ? x : x + 1;
-        } else if (type == equation.function_y ||
-                   type == equation.function_yy) {
+        }
+        else if (type == equation.FUNCTION_Y ||
+                 type == equation.FUNCTION_YY) {
             diff_initial = (y == 0) ? 0 : y - 1;
             diff_middle = y;
             diff_final = (y == matriz.rows() - 1) ? y : y + 1;
@@ -63,7 +64,7 @@ public abstract class Derivative {
      *
      * @param x
      * @param y
-     * @param type type of function that will be returned, can be normal value
+     * @param type type of FUNCTION that will be returned, can be normal value
      *             or can be a derivative
      * @return
      */
@@ -101,7 +102,7 @@ public abstract class Derivative {
      *
      * @param x
      * @param y
-     * @param type type of function that will be returned, can be normal value
+     * @param type type of FUNCTION that will be returned, can be normal value
      *             or can be a derivative
      * @return
      */

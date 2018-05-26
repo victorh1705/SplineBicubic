@@ -16,8 +16,8 @@ public class Pivoting {
      *
      * @param matrix    SparseMatrix that will be pivoted
      * @param vector    Vector that multiply the Matrix
-     * @param invertido If the pivoting must be done from the last row and
-     *                  column to the first row and column
+     * @param invertido If the pivoting must be done from the last HORIZONTAL and
+     *                  VERTICAL to the first HORIZONTAL and VERTICAL
      */
     public static void Basic(SparseMatrix matrix, Vector vector, boolean
             invertido) {

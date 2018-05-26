@@ -59,13 +59,13 @@ public class FileManager {
 
         for (int i = 1; i < result.rows(); i++) {
             result.set(i, 0, range * (i - 1));
-            System.out.printf("range %f  - %f\n", range * (i - 1),
-                    result.get(i, 0));
+//            System.out.printf("range %f  - %f\n", range * (i - 1),
+//                    result.get(i, 0));
         }
         for (int i = 1; i < result.columns(); i++) {
             result.set(0, i, range * (i - 1));
-            System.out.printf("range %f  - %f\n", range * (i - 1),
-                    result.get(0, i));
+//            System.out.printf("range %f  - %f\n", range * (i - 1),
+//                    result.get(0, i));
         }
 
         for (int i = 1; i < result.rows(); i++) {

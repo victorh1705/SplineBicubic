@@ -15,9 +15,10 @@ public class FirstDerivative extends Derivative {
 
         initVariables(x, y, type);
 
-        if (type == equation.function_x) {
+        if (type == equation.FUNCTION_X) {
             return calculateAxisX(x, y, type);
-        } else if (type == equation.function_y) {
+        }
+        else if (type == equation.FUNCTION_Y) {
             return calculatingAxisY(x, y, type);
         }
 
@@ -28,7 +29,7 @@ public class FirstDerivative extends Derivative {
     protected double diference(int x, int y, equation type, diff diff) {
 
         switch (type) {
-            case function_x:
+            case FUNCTION_X:
                 if (x == 0 || x == matriz.columns() - 1) {
                     return matriz.getValue(diff_final, y) -
                            matriz.getValue(diff_initial, y);
@@ -43,7 +44,7 @@ public class FirstDerivative extends Derivative {
                 }
                 break;
 
-            case function_y:
+            case FUNCTION_Y:
 
                 if (y == 0 || y == matriz.rows() - 1) {
                     return matriz.getValue(x, diff_final) -

@@ -1,6 +1,7 @@
 package structure;
 
 import library.derivative.firstDerivative.FirstDerivative;
+import library.derivative.secondDerivative.SecondDerivative;
 import org.la4j.Vector;
 import org.la4j.matrix.dense.Basic2DMatrix;
 import type.equation;
@@ -87,18 +88,43 @@ public class Matriz extends Basic2DMatrix {
             }
         }
 
-        System.out.printf("\nValor 2 (%.2f,%.2f) = %.4f  Regiao X=%d, Y=%d " +
-                          "", x,
-                y,
-                valor, x_index, y_index);
+//        System.out.printf("\nValor 2 (%.2f,%.2f) = %.4f  Regiao X=%d, Y=%d " +
+//                          "", x, y, valor, x_index, y_index);
+        return valor;
+    }
+
+    public static double valorZ2(Vector polinomio, double x,
+            double y) {
+        double valor = 0;
+
+        int int_X = (int) x;
+        int int_Y = (int) y;
+
+        int x_index = (!(int_X == 2)) ? int_X :
+                      int_X - 1;
+        int y_index = (!(int_Y == 2)) ? int_Y :
+                      int_Y - 1;
+
+        int first_term = 16 * (2 * x_index + y_index);
+
+        for (int i = 0; i <= 3; i++) {
+            for (int j = 0; j <= 3; j++) {
+                valor += (pow(x, i)) * (pow(y, j)) *
+                         polinomio.get(first_term + (4 * i + j));
+            }
+        }
+
+//        System.out.printf("\nValor 2 (%.2f,%.2f) = %.4f  Regiao X=%d, Y=%d " +
+//                          "", x, y, valor, x_index, y_index);
         return valor;
     }
 
     /**
-     * Equivalent to get(row,line) or super.get(line,row)
+     * Equivalent to get(HORIZONTAL,line) or super.get(line,HORIZONTAL)
      *
-     * @param x row
+     * @param x HORIZONTAL
      * @param y line
+     *
      * @return super.get(y, x)
      */
     public double getValue(int x, int y) {
@@ -106,9 +132,9 @@ public class Matriz extends Basic2DMatrix {
     }
 
     /**
-     * Equivalent to set(row,line) or super.set(line,row)
+     * Equivalent to set(HORIZONTAL,line) or super.set(line,HORIZONTAL)
      *
-     * @param x     row
+     * @param x     HORIZONTAL
      * @param y     line
      * @param value
      */
@@ -120,6 +146,7 @@ public class Matriz extends Basic2DMatrix {
      * Get the value related to the <b><i>x</i></b> axis
      *
      * @param index
+     *
      * @return
      */
     public double get_x(int index) {
@@ -130,6 +157,7 @@ public class Matriz extends Basic2DMatrix {
      * Get the value related to the <b><i>y</i></b> axis
      *
      * @param index
+     *
      * @return
      */
     public double get_y(int index) {
@@ -142,6 +170,7 @@ public class Matriz extends Basic2DMatrix {
      *
      * @param x
      * @param y
+     *
      * @return
      */
     public typePoint getType_point(int x, int y) {
@@ -162,12 +191,15 @@ public class Matriz extends Basic2DMatrix {
                 if (row == 0 || row == rows() - 1) {
                     if (column == 0 || column == columns() - 1) {
                         type_point[row][column] = typePoint.vertex;
-                    } else {
+                    }
+                    else {
                         type_point[row][column] = typePoint.edge;
                     }
-                } else if (column == 0 || column == columns() - 1) {
+                }
+                else if (column == 0 || column == columns() - 1) {
                     type_point[row][column] = typePoint.edge;
-                } else {
+                }
+                else {
                     type_point[row][column] = typePoint.intern;
                 }
             }
@@ -180,22 +212,27 @@ public class Matriz extends Basic2DMatrix {
      * @param x
      * @param y
      * @param type type of derivate
+     *
      * @return
      */
     public double derivate(int x, int y, equation type) {
         switch (type) {
-            case function_x:
+            //TODO: Refatorar usando FACADE
+            case FUNCTION_X:
                 return new FirstDerivative(this).derivate(x, y,
                         type);
-            case function_y:
+            case FUNCTION_Y:
                 return new FirstDerivative(this).derivate(x, y,
                         type);
-            case function_xy:
-                break;
-            case function_xx:
-                break;
-            case function_yy:
-                break;
+            case FUNCTION_XY:
+                return new SecondDerivative(this).derivate(x, y,
+                        type);
+            case FUNCTION_XX:
+                return new SecondDerivative(this).derivate(x, y,
+                        type);
+            case FUNCTION_YY:
+                return new SecondDerivative(this).derivate(x, y,
+                        type);
         }
         fail("Illegal Equation type:" + type);
         return 0;

@@ -61,7 +61,7 @@ public class DerivativeTest {
     @Test
     public void function_x() {
         System.out.println("X - firstDerivative");
-        equation type = equation.function_x;
+        equation type = equation.FUNCTION_X;
         double expResult = 0.0;
 
         Matriz local_matriz = new Matriz(matriz.rows(), matriz.columns());
@@ -82,7 +82,7 @@ public class DerivativeTest {
     @Test
     public void function_xx() {
         System.out.println("XX - 2ndDerivative");
-        equation type = equation.function_xx;
+        equation type = equation.FUNCTION_XX;
         double expResult = 0.0;
 
         Matriz local_matriz = new Matriz(matriz.rows(), matriz.columns());
@@ -103,7 +103,7 @@ public class DerivativeTest {
     @Test
     public void function_y() {
         System.out.println("Y - firstDerivative");
-        equation type = equation.function_y;
+        equation type = equation.FUNCTION_Y;
         double expResult = 0.0;
 
         Matriz local_matriz = new Matriz(matriz.rows(), matriz.columns());
@@ -125,7 +125,7 @@ public class DerivativeTest {
     @Test
     public void function_yy() {
         System.out.println("YY - 2nd Derivative");
-        equation type = equation.function_yy;
+        equation type = equation.FUNCTION_YY;
         double expResult = 0.0;
 
         Matriz local_matriz = new Matriz(matriz.rows(), matriz.columns());
@@ -146,7 +146,7 @@ public class DerivativeTest {
     @Test
     public void function_xy() {
         System.out.println("XY - 2nd Derivative");
-        equation type = equation.function_xy;
+        equation type = equation.FUNCTION_XY;
         double expResult = 0.0;
 
         Matriz local_matriz = new Matriz(matriz.rows(), matriz.columns());

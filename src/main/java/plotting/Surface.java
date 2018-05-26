@@ -27,7 +27,7 @@ public class Surface extends AbstractAnalysis {
 
     @Override
     public void init() {
-        // Define a function to plot
+        // Define a FUNCTION to plot
         Mapper mapper = new Mapper() {
             @Override
             public double f(double x, double y) {
@@ -35,11 +35,11 @@ public class Surface extends AbstractAnalysis {
             }
         };
 
-        // Define range and precision for the function to plot
+        // Define range and precision for the FUNCTION to plot
         Range range = new Range(0, 2);
         int steps = 20;
 
-        // Create the object to represent the function over the given range.
+        // Create the object to represent the FUNCTION over the given range.
         final Shape surface = Builder.buildOrthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
 
         surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(), surface.getBounds().getZmax(), new Color(1, 1, 1, .5f)));

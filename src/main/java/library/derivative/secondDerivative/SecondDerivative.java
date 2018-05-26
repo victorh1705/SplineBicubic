@@ -17,11 +17,13 @@ public class SecondDerivative extends Derivative {
 
         initVariables(x, y, type);
 
-        if (type == equation.function_xx) {
+        if (type == equation.FUNCTION_XX) {
             return calculateAxisX(x, y, type);
-        } else if (type == equation.function_yy) {
+        }
+        else if (type == equation.FUNCTION_YY) {
             return calculatingAxisY(x, y, type);
-        } else if (type == equation.function_xy) {
+        }
+        else if (type == equation.FUNCTION_XY) {
             if (null != matriz.getType_point(x, y)) {
                 int x_big = (x < matriz.columns() - 1) ? x + 1 : x,
                         x_med = x,
@@ -60,8 +62,8 @@ public class SecondDerivative extends Derivative {
 
 
         switch (type) {
-            case function_xx:
-                fd_type = equation.function_x;
+            case FUNCTION_XX:
+                fd_type = equation.FUNCTION_X;
                 if (x == 0 || x == matriz.rows() - 1) {
                     return new FirstDerivative(matriz).derivate(
                             diff_final, y, fd_type) -
@@ -82,8 +84,8 @@ public class SecondDerivative extends Derivative {
                 }
 
                 break;
-            case function_yy:
-                fd_type = equation.function_y;
+            case FUNCTION_YY:
+                fd_type = equation.FUNCTION_Y;
                 if (y == 0 || y == matriz.rows() - 1) {
                     return new FirstDerivative(matriz).derivate(x,
                             diff_final, fd_type) -
@@ -105,8 +107,8 @@ public class SecondDerivative extends Derivative {
                     }
                 }
                 break;
-            case function_xy:
-                fd_type = equation.function_x;
+            case FUNCTION_XY:
+                fd_type = equation.FUNCTION_X;
                 if (y == 0 || y == matriz.rows() - 1) {
                     return new FirstDerivative(matriz).derivate(x,
                             diff_final, fd_type) -
