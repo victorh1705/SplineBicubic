@@ -1,21 +1,16 @@
 package fileManager.excel;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.WorkbookUtil;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 
 public class Excel implements AutoCloseable {
 
     protected static String path = "export/";
-    protected static String type = ".xls";
+    protected static String type = ".xlsx";
 
     protected Workbook wb;
     protected Sheet sheet;
@@ -27,9 +22,17 @@ public class Excel implements AutoCloseable {
 
     public Excel(String name) throws FileNotFoundException {
         this.name = WorkbookUtil.createSafeSheetName(name);
-        this.wb = new HSSFWorkbook();
+        this.wb = new XSSFWorkbook();
 
         this.fileOut = new FileOutputStream(path + name + type);
+    }
+
+    public Excel() {
+    }
+
+    public void readFile(String name)
+            throws IOException, InvalidFormatException {
+        this.wb = WorkbookFactory.create(new File(name));
     }
 
     public void createSheet(String name) {

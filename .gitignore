@@ -10,3 +10,4 @@ nbactions.xml
 *.xlsx
 *.xlsm
 /nbproject/
+data/

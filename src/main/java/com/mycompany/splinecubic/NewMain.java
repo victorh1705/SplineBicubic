@@ -32,33 +32,68 @@ public class NewMain {
     }
 
     private static void excelCreator() {
-        try (ExcelCreator ec = new ExcelCreator("novo")) {
+        Matriz matriz_esperado;
+
+
+        try (ExcelCreator ec = new ExcelCreator("report")) {
+            ec.createSheet("resultado_esperado");
+
+
+            //Resultado Esperado
+            ExcelCreator readMatriz = new ExcelCreator();
+            readMatriz.readFile("data/Bicubica.xlsx");
+
+            matriz_esperado = readMatriz.readMatriz(
+                    "Calculos_2");
+
+            ec.setMatriz(matriz_esperado);
+
+
+            //Resultado Calculado
             Vector aux = new BasicVector(21);
             for (int i = 0; i <= 20; i++) {
                 aux.set(i, i * 0.1);
             }
             Vector polinomio = criacaoMatriz();
 
-            Matriz matriz = new Matriz(21, 21);
+            Matriz matriz_calculado = new Matriz(aux.length(), aux.length());
             for (int i = 0; i <= 20; i++) {
                 for (int j = 0; j <= 20; j++) {
                     double valor = Matriz.valorZ2(polinomio,
                             aux.get(i), aux.get(j));
-                    matriz.setValue(i, j, valor);
+                    matriz_calculado.setValue(i, j, valor);
                 }
             }
 
 
-            ec.createSheet("planilha1");
+            ec.createSheet("resultado_real");
 
             ec.setVector(aux, 1, ExcelCreator.Direction.VERTICAL);
             ec.setVector(aux, 1, ExcelCreator.Direction.HORIZONTAL);
-            ec.setMatriz(matriz, 1, 1);
+            ec.setMatriz(matriz_calculado, 1, 1);
 
-//            ec.setValue(0, 0, "Linha 1");
-//            ec.setValue(1, 0, "Linha 2");
-//            ec.setValue(2, 0, "Linha 3");
+
             //TODO: (valorReferencia - valorSaida)/valorSaida
+            ec.createSheet("diferenca");
+
+            Matriz diference = new Matriz(matriz_calculado.columns(),
+                    matriz_calculado.rows());
+
+            for (int i = 0; i < matriz_calculado.columns(); i++) {
+                for (int j = 0; j < matriz_calculado.rows(); j++) {
+                    double value =
+                            Math.abs(
+                                    (matriz_esperado.getValue(i + 1, j + 1) -
+                                     matriz_calculado.getValue(i, j))
+                                    / matriz_calculado.getValue(i, j));
+
+                    diference.setValue(i, j, value);
+                }
+            }
+
+            ec.setMatriz(diference, 1, 1);
+
+
             ec.writeFile();
         } catch (Exception e) {
             e.printStackTrace();
@@ -75,10 +110,10 @@ public class NewMain {
 
 //        int indices = data_matriz.columns() * data_matriz.rows();
 
-        fm.createFile("saida", ps.getSparce_matriz());
-        fm.createFile("resultado", ps.getValue_b());
-        fm.createFile("polinomio", polinomio);
-        fm.createData("data", data_matriz, polinomio, 0.1);
+//        fm.createFile("saida", ps.getSparce_matriz());
+//        fm.createFile("resultado", ps.getValue_b());
+//        fm.createFile("polinomio", polinomio);
+//        fm.createData("data", data_matriz, polinomio, 0.1);
 
 
 //        plot(data_matriz, polinomio);

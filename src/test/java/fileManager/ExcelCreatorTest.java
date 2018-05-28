@@ -1,23 +1,28 @@
 package fileManager;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.junit.*;
 import org.la4j.Vector;
 import org.la4j.vector.dense.BasicVector;
 import structure.Matriz;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class ExcelCreatorTest {
 
     private static ExcelCreator matriz;
     private static ExcelCreator v_vertical;
     private static ExcelCreator v_horizontal;
+    private static ExcelCreator leitura;
 
     @BeforeClass
-    public static void setUpClass() throws FileNotFoundException {
+    public static void setUpClass() throws IOException, InvalidFormatException {
         matriz = new ExcelCreator("test/matriz");
         v_vertical = new ExcelCreator("test/vetor_vertical");
         v_horizontal = new ExcelCreator("test/vetor_horizontal");
+
+        leitura = new ExcelCreator();
+        leitura.readFile("data/Bicubica.xlsx");
     }
 
     @AfterClass
@@ -25,6 +30,7 @@ public class ExcelCreatorTest {
         matriz.close();
         v_vertical.close();
         v_horizontal.close();
+        leitura.close();
     }
 
     @Before
@@ -80,5 +86,9 @@ public class ExcelCreatorTest {
         v_horizontal.setVector(horizontal, 1,
                 ExcelCreator.Direction.HORIZONTAL);
         v_horizontal.writeFile();
+    }
+
+    @Test
+    public void readFunction() {
     }
 }
