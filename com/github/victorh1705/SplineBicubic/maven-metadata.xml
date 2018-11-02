@@ -4,8 +4,8 @@
   <artifactId>SplineBicubic</artifactId>
   <versioning>
     <versions>
-      <version>0.1.1-SNAPSHOT</version>
+      <version>0.1.2-SNAPSHOT</version>
     </versions>
-    <lastUpdated>20181029005004</lastUpdated>
+    <lastUpdated>20181102194624</lastUpdated>
   </versioning>
 </metadata>
